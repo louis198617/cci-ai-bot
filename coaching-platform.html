@@ -1,0 +1,2786 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI教练对话练习平台 | CCI · AI Coaching Practice Platform</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Sora:wght@300;400;600;700;800&family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ============================================================
+       CCI COACHING PLATFORM — DESIGN SYSTEM v2
+       Aesthetic: Warm Editorial / Deep Workspace
+       Primary: Deep Teal  (#0B6E73)
+       Accent:  Gold       (#C5921A)
+       Dark:    Ink Navy   (#16202C)
+       ============================================================ */
+    :root {
+      /* Teal – core brand */
+      --teal:        #0B6E73;
+      --teal-dark:   #085458;
+      --teal-deeper: #053E42;
+      --teal-mid:    #1A9FA8;
+      --teal-light:  #DFF0F1;
+      --teal-pale:   #EEF6F7;
+
+      /* Gold – accent */
+      --gold:        #C5921A;
+      --gold-dark:   #A47614;
+      --gold-light:  #FFF6E0;
+      --gold-mid:    #E8A920;
+
+      /* Neutrals — warm editorial palette */
+      --navy:        #16202C;
+      --navy-light:  #2C3E52;
+      --bg:          #F3F1EC;
+      --bg-alt:      #EAE7E0;
+      --white:       #FEFCF8;
+      --card:        #FEFCF8;
+      --border:      #DDD8CF;
+      --border-light:#E8E4DC;
+      --text:        #16202C;
+      --text-light:  #4A5C6B;
+      --text-muted:  #96A4AE;
+
+      /* Semantic */
+      --success:     #057A55;
+      --success-bg:  #ECFDF5;
+      --warning:     #D97706;
+      --warning-bg:  #FFFBEB;
+      --danger:      #C0392B;
+      --danger-bg:   #FEF2F2;
+
+      /* Provider brand colors */
+      --anthropic:   #D97706;
+      --openai:      #10A37F;
+      --google:      #4285F4;
+      --openrouter:  #7C3AED;
+
+      /* Radius — crisper */
+      --r:   6px;
+      --rlg: 10px;
+      --rxl: 14px;
+
+      /* Shadows — warm-toned, not cold gray */
+      --shadow-sm: 0 1px 4px rgba(22,32,44,.06);
+      --shadow:    0 2px 12px rgba(22,32,44,.09);
+      --shadow-lg: 0 8px 32px rgba(22,32,44,.13);
+
+      /* Typography */
+      --font-display: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+      --font-body:    'Sora', 'Noto Sans SC', system-ui, sans-serif;
+    }
+
+    /* Page-load entrance animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 15% 65%, rgba(11,110,115,.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(197,146,26,.04) 0%, transparent 55%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+
+    /* ---- APP HEADER ---- */
+    .app-header {
+      background: var(--navy);
+      color: white;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 1px 0 rgba(255,255,255,.06), 0 4px 20px rgba(0,0,0,.28);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-emblem {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--gold-mid) 0%, var(--gold) 100%);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 14px; color: white;
+      letter-spacing: -.5px;
+      font-family: var(--font-display);
+      box-shadow: 0 2px 8px rgba(197,146,26,.4);
+      flex-shrink: 0;
+    }
+    .logo-text { line-height: 1.25; }
+    .logo-text .l1 {
+      font-size: 14px; font-weight: 700; letter-spacing: .2px;
+      color: white;
+    }
+    .logo-text .l2 {
+      font-size: 10px; color: rgba(255,255,255,.42);
+      letter-spacing: 1.2px; text-transform: uppercase;
+    }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .lang-btn {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.75);
+      padding: 5px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-family: var(--font-body);
+      transition: all .15s;
+    }
+    .lang-btn:hover { background: rgba(255,255,255,.16); color: white; }
+    .header-badge {
+      background: var(--gold);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: .5px;
+    }
+
+    /* ---- MAIN LAYOUT ---- */
+    .main { padding: 36px 28px; max-width: 1100px; margin: 0 auto; }
+
+    /* ---- CARD ---- */
+    .card {
+      background: var(--card);
+      border-radius: var(--rlg);
+      box-shadow: var(--shadow-sm);
+      padding: 28px;
+      border: 1px solid var(--border-light);
+    }
+    .card-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--teal-dark);
+      margin-bottom: 6px;
+    }
+    .card-sub { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+
+    /* ---- BUTTONS ---- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 7px; padding: 10px 22px;
+      border-radius: var(--r); font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none;
+      transition: all .15s; text-decoration: none;
+      letter-spacing: .3px; font-family: var(--font-body);
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+      box-shadow: 0 1px 4px rgba(11,110,115,.3), inset 0 1px 0 rgba(255,255,255,.1);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(11,110,115,.35);
+    }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+    .btn-gold {
+      background: var(--gold);
+      color: white;
+      box-shadow: 0 1px 4px rgba(197,146,26,.3), inset 0 1px 0 rgba(255,255,255,.1);
+    }
+    .btn-gold:hover:not(:disabled) { background: var(--gold-dark); transform: translateY(-1px); }
+    .btn-gold:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+    .btn-outline {
+      background: transparent; color: var(--teal);
+      border: 1.5px solid var(--teal);
+    }
+    .btn-outline:hover { background: var(--teal-pale); }
+    .btn-ghost {
+      background: transparent; color: var(--text-light);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--bg); color: var(--text); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #A93226; }
+    .btn-sm { padding: 5px 13px; font-size: 12px; }
+    .btn-lg { padding: 13px 30px; font-size: 14px; letter-spacing: .5px; }
+    .btn-full { width: 100%; }
+
+    /* ---- FORM ---- */
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block; font-size: 11px; font-weight: 700;
+      color: var(--text-muted); margin-bottom: 6px;
+      text-transform: uppercase; letter-spacing: .8px;
+    }
+    .form-input {
+      width: 100%; padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--r); font-size: 14px; color: var(--text);
+      background: var(--white); transition: border-color .15s, box-shadow .15s;
+      font-family: var(--font-body);
+    }
+    .form-input:focus {
+      outline: none; border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(11,110,115,.1);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-textarea { resize: vertical; min-height: 88px; }
+    .form-hint { font-size: 12px; color: var(--text-light); margin-top: 5px; }
+
+    /* ---- SECURITY NOTICE ---- */
+    .security-notice {
+      background: linear-gradient(135deg, #FFF8E8 0%, #FFF3D0 100%);
+      border: 1px solid #F0D080;
+      border-radius: var(--r);
+      padding: 12px 16px;
+      font-size: 13px; color: #6B4A0A;
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    /* ============================================================
+       PROVIDER SELECTOR
+       ============================================================ */
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .provider-card {
+      border: 2px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all .2s;
+      background: white;
+    }
+    .provider-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .provider-card.sel-anthropic { border-color: var(--anthropic); background: #FFF8F0; }
+    .provider-card.sel-openai    { border-color: var(--openai);    background: #F0FDF8; }
+    .provider-card.sel-google    { border-color: var(--google);    background: #F0F5FF; }
+    .provider-card.sel-openrouter{ border-color: var(--openrouter);background: #F5F0FF; }
+    .provider-icon { font-size: 22px; margin-bottom: 5px; }
+    .provider-name { font-size: 12px; font-weight: 800; color: var(--navy); }
+    .provider-hint { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .provider-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      margin: 4px auto 0;
+      background: var(--border);
+    }
+    .provider-card.sel-anthropic .provider-dot { background: var(--anthropic); }
+    .provider-card.sel-openai    .provider-dot { background: var(--openai); }
+    .provider-card.sel-google    .provider-dot { background: var(--google); }
+    .provider-card.sel-openrouter .provider-dot { background: var(--openrouter); }
+
+    /* ---- API GUIDE BOX ---- */
+    .api-guide {
+      background: var(--bg); border: 1px solid var(--border-light);
+      border-radius: var(--r); padding: 16px 18px; margin-bottom: 16px;
+      position: relative;
+    }
+    .api-guide-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px; cursor: pointer;
+    }
+    .api-guide-title {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: .8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .api-guide-toggle {
+      font-size: 10px; color: var(--teal); font-weight: 600;
+      background: none; border: none; cursor: pointer;
+      letter-spacing: .5px;
+    }
+    .api-guide-toggle:hover { text-decoration: underline; }
+    .api-guide-body { display: none; }
+    .api-guide.open .api-guide-body { display: block; }
+    .api-guide-steps {
+      list-style: none; counter-reset: step; padding: 0; margin: 0 0 12px;
+    }
+    .api-guide-steps li {
+      counter-increment: step;
+      font-size: 13px; color: var(--text-light); line-height: 1.6;
+      padding: 5px 0 5px 28px; position: relative;
+    }
+    .api-guide-steps li::before {
+      content: counter(step);
+      position: absolute; left: 0; top: 6px;
+      width: 20px; height: 20px; border-radius: 4px;
+      background: var(--teal-light); color: var(--teal);
+      font-size: 10px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .api-guide-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+      padding-top: 10px; border-top: 1px solid var(--border-light);
+    }
+    .api-guide-pricing {
+      font-size: 11px; color: var(--text-muted); letter-spacing: .2px;
+    }
+    .api-guide-link {
+      font-size: 12px; font-weight: 700; color: var(--teal);
+      text-decoration: none; letter-spacing: .3px;
+      display: inline-flex; align-items: center; gap: 4px;
+      transition: gap .15s;
+    }
+    .api-guide-link:hover { gap: 8px; text-decoration: none; }
+
+    /* ============================================================
+       HOME HERO — Dark editorial with geometric grid
+       ============================================================ */
+    .home-hero {
+      background-color: var(--navy);
+      background-image:
+        linear-gradient(rgba(11,110,115,.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11,110,115,.22) 1px, transparent 1px);
+      background-size: 44px 44px;
+      border-radius: var(--rxl);
+      padding: 54px 46px;
+      color: white;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .5s ease both;
+    }
+    .home-hero::before {
+      content: '';
+      position: absolute; bottom: -80px; right: -60px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(11,110,115,.45) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .home-hero::after {
+      content: '';
+      position: absolute; top: -50px; left: 32%;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(197,146,26,.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .home-hero-inner { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(197,146,26,.16);
+      border: 1px solid rgba(197,146,26,.38);
+      color: #F5CC6A;
+      font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border-radius: 3px;
+      margin-bottom: 18px; letter-spacing: .9px;
+      text-transform: uppercase;
+    }
+    .home-hero h1 {
+      font-size: 38px; font-weight: 900; line-height: 1.12;
+      margin-bottom: 14px;
+      font-family: var(--font-display);
+      letter-spacing: -.5px;
+    }
+    .home-hero h1 span { color: #F5CC6A; }
+    .home-hero p { font-size: 15px; color: rgba(255,255,255,.68); max-width: 560px; line-height: 1.72; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 30px; flex-wrap: wrap;
+    }
+    .hero-stat { text-align: left; }
+    .hero-stat .num {
+      font-size: 30px; font-weight: 900; color: #F5CC6A;
+      font-family: var(--font-display); line-height: 1;
+    }
+    .hero-stat .label { font-size: 11px; color: rgba(255,255,255,.52); margin-top: 3px; letter-spacing: .5px; }
+
+    /* ---- MODE CARDS ---- */
+    .mode-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+    .mode-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--rlg);
+      padding: 26px;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .5s ease both;
+    }
+    .mode-card:nth-child(1) { animation-delay: .06s; }
+    .mode-card:nth-child(2) { animation-delay: .12s; }
+    .mode-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-mid));
+      opacity: 0; transition: opacity .2s;
+    }
+    .mode-card:hover { border-color: var(--teal); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .mode-card:hover::before { opacity: 1; }
+    .mode-card.disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+    .mode-icon { font-size: 32px; margin-bottom: 14px; }
+    .mode-title {
+      font-size: 16px; font-weight: 700; color: var(--navy);
+      margin-bottom: 7px; font-family: var(--font-display);
+    }
+    .mode-desc { font-size: 13px; color: var(--text-light); line-height: 1.62; }
+    .mode-cta {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 16px; font-size: 11px; font-weight: 700;
+      color: var(--teal); transition: gap .15s;
+      letter-spacing: .8px; text-transform: uppercase;
+    }
+    .mode-card:hover .mode-cta { gap: 10px; }
+
+    /* ============================================================
+       SETUP VIEW
+       ============================================================ */
+    .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .opt-btn {
+      border: 2px solid var(--border);
+      background: white; border-radius: var(--r);
+      padding: 14px 16px; cursor: pointer; text-align: left;
+      transition: all .18s; display: flex; align-items: flex-start; gap: 12px;
+      width: 100%;
+    }
+    .opt-btn:hover { border-color: var(--teal); background: var(--teal-light); }
+    .opt-btn.selected { border-color: var(--teal); background: var(--teal-light); }
+    .opt-btn .oi { font-size: 20px; margin-top: 1px; }
+    .opt-btn .ot { font-size: 14px; font-weight: 800; color: var(--navy); }
+    .opt-btn .od { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+    .model-tag {
+      display: inline-block; background: var(--teal-deeper);
+      color: white; font-size: 11px; font-weight: 800;
+      padding: 2px 7px; border-radius: 4px; margin-bottom: 3px;
+    }
+    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .scenario-item {
+      border: 2px solid var(--border); background: white;
+      border-radius: var(--r); padding: 12px 16px;
+      cursor: pointer; font-size: 13px; color: var(--text);
+      transition: all .18s; display: flex; align-items: center; gap: 8px;
+    }
+    .scenario-item:hover { border-color: var(--teal); background: var(--teal-light); }
+    .scenario-item.selected { border-color: var(--teal); background: var(--teal-light); font-weight: 700; }
+    .scenario-num {
+      min-width: 20px; height: 20px; border-radius: 4px;
+      background: var(--teal-light); color: var(--teal);
+      font-size: 10px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .scenario-item.selected .scenario-num { background: var(--teal); color: white; }
+
+    /* ---- BREADCRUMB ---- */
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-muted); margin-bottom: 22px;
+    }
+    .breadcrumb .bc-link { color: var(--teal); cursor: pointer; font-weight: 600; }
+    .breadcrumb .bc-link:hover { text-decoration: underline; }
+
+    /* ============================================================
+       CHAT VIEW
+       ============================================================ */
+    .chat-page {
+      padding: 16px 24px;
+      height: calc(100vh - 60px);
+      display: flex; flex-direction: column; gap: 14px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .chat-layout { display: grid; grid-template-columns: 1fr 300px; gap: 14px; flex: 1; min-height: 0; }
+    .chat-panel {
+      display: flex; flex-direction: column;
+      background: var(--card); border-radius: var(--rlg);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .chat-bar {
+      background: var(--navy);
+      color: white; padding: 12px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .chat-bar-info strong { font-size: 14px; font-weight: 800; display: block; }
+    .chat-bar-meta { font-size: 11px; opacity: .72; margin-top: 2px; }
+    .turn-pill {
+      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3);
+      padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 700;
+    }
+    .chat-msgs {
+      flex: 1; overflow-y: auto; padding: 20px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .chat-msgs::-webkit-scrollbar { width: 5px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .sys-msg { text-align: center; font-size: 12px; color: var(--text-muted); padding: 4px; }
+    .msg { max-width: 76%; display: flex; flex-direction: column; gap: 4px; }
+    .msg.ai { align-self: flex-start; }
+    .msg.user { align-self: flex-end; }
+    .msg-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); padding: 0 4px; }
+    .msg.user .msg-lbl { text-align: right; }
+    .msg-bbl {
+      padding: 12px 16px; border-radius: var(--rlg);
+      font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word;
+    }
+    .msg.ai .msg-bbl {
+      background: var(--teal-pale); color: var(--text);
+      border: 1px solid var(--teal-light);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user .msg-bbl {
+      background: var(--navy);
+      color: white; border-bottom-right-radius: 3px;
+    }
+    .typing-bbl { background: var(--teal-pale); border: 1px solid var(--teal-light); padding: 14px 20px; border-radius: var(--rlg); border-bottom-left-radius: 4px; }
+    .dots { display: flex; gap: 5px; align-items: center; }
+    .dots span { width: 7px; height: 7px; background: var(--teal-mid); border-radius: 50%; animation: bounce 1.2s infinite; }
+    .dots span:nth-child(2) { animation-delay: .2s; }
+    .dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+    .chat-input-row {
+      border-top: 1px solid var(--border-light);
+      padding: 11px 13px;
+      display: flex; gap: 9px; align-items: flex-end;
+      flex-shrink: 0; background: var(--card);
+    }
+    .chat-in {
+      flex: 1; border: 1px solid var(--border);
+      border-radius: var(--r); padding: 10px 14px;
+      font-size: 14px; resize: none;
+      min-height: 42px; max-height: 120px; line-height: 1.5;
+      font-family: var(--font-body); color: var(--text);
+      background: var(--bg);
+      transition: border-color .15s;
+    }
+    .chat-in:focus { outline: none; border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 3px rgba(11,110,115,.1); }
+    .chat-in:disabled { opacity: .6; cursor: not-allowed; }
+    .send-btn {
+      width: 42px; height: 42px;
+      background: var(--teal);
+      border: none; border-radius: var(--r);
+      color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 17px; transition: all .15s; flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(11,110,115,.3);
+    }
+    .send-btn:hover:not(:disabled) { background: var(--teal-dark); transform: translateY(-1px); }
+    .send-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+    /* GUIDE PANEL */
+    .guide-panel { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+    .guide-card {
+      background: var(--card); border-radius: var(--rlg);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      padding: 15px; overflow-y: auto; flex: 1;
+    }
+    .guide-card::-webkit-scrollbar { width: 4px; }
+    .guide-card::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .guide-h {
+      font-size: 10px; font-weight: 700; color: var(--text-muted);
+      margin-bottom: 13px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex; align-items: center; gap: 7px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .step-row {
+      display: flex; gap: 10px; margin-bottom: 12px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--border-light);
+    }
+    .step-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .step-letter {
+      width: 24px; height: 24px;
+      background: var(--teal);
+      color: white; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+    }
+    .step-name { font-size: 12px; font-weight: 800; color: var(--navy); }
+    .step-desc { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+    .step-q { font-size: 11px; color: var(--teal); font-style: italic; margin-top: 3px; line-height: 1.4; }
+    .tips-card { background: var(--card); border-radius: var(--rlg); border: 1px solid var(--border-light); padding: 13px; flex-shrink: 0; }
+    .tip-row {
+      font-size: 12px; color: var(--text-light);
+      padding: 6px 8px; border-radius: 6px;
+      display: flex; gap: 7px; align-items: flex-start;
+      cursor: pointer; transition: all .18s;
+      margin-bottom: 3px;
+    }
+    .tip-row:hover { background: var(--teal-light); color: var(--teal-dark); }
+    .tip-row .tip-arrow { margin-left: auto; opacity: 0; font-size: 11px; transition: opacity .18s; }
+    .tip-row:hover .tip-arrow { opacity: 1; }
+
+    /* ---- TIP MODAL ---- */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(22,32,44,.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      animation: fadeIn .18s ease;
+    }
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+    .modal-box {
+      background: var(--card);
+      border-radius: var(--rxl);
+      max-width: 520px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(22,32,44,.4);
+      animation: slideUp .2s ease;
+      border: 1px solid var(--border);
+    }
+    @keyframes slideUp { from { transform:translateY(20px); opacity:0 } to { transform:none; opacity:1 } }
+    .modal-head {
+      background: var(--navy);
+      padding: 22px 24px;
+      border-radius: var(--rxl) var(--rxl) 0 0;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+    .modal-head-icon { font-size: 26px; }
+    .modal-head-title { font-size: 15px; font-weight: 700; color: white; flex: 1; font-family: var(--font-display); }
+    .modal-head-sub { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 3px; letter-spacing: .3px; }
+    .modal-close {
+      width: 26px; height: 26px; border-radius: 4px;
+      background: rgba(255,255,255,.12); border: none;
+      color: rgba(255,255,255,.7); font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background .12s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.22); color: white; }
+    .modal-body { padding: 22px 24px; }
+    .modal-desc { font-size: 14px; color: var(--text); line-height: 1.7; margin-bottom: 18px; }
+    .modal-quote {
+      background: var(--teal-pale);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 var(--r) var(--r) 0;
+      padding: 14px 16px; margin-bottom: 18px;
+    }
+    .modal-quote-label {
+      font-size: 10px; font-weight: 800; letter-spacing: .8px;
+      color: var(--teal); margin-bottom: 6px; text-transform: uppercase;
+    }
+    .modal-quote-text { font-size: 13px; color: var(--text); line-height: 1.7; font-style: italic; }
+    .modal-quote-page { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+    .modal-tips-title { font-size: 13px; font-weight: 800; color: var(--navy); margin-bottom: 10px; }
+    .modal-tip-item {
+      display: flex; gap: 8px; align-items: flex-start;
+      font-size: 13px; color: var(--text-light);
+      padding: 6px 0; border-bottom: 1px solid var(--border-light);
+      line-height: 1.5;
+    }
+    .modal-tip-item:last-child { border-bottom: none; }
+    .modal-tip-dot { color: var(--gold); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ============================================================
+       FEEDBACK VIEW
+       ============================================================ */
+    .fb-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+    .rev-item {
+      background: var(--bg); border-radius: var(--r);
+      padding: 14px 16px; margin-bottom: 10px;
+      border-left: 4px solid var(--border);
+    }
+    .rev-item.good    { border-left-color: var(--success); background: var(--success-bg); }
+    .rev-item.warning { border-left-color: var(--warning); background: var(--warning-bg); }
+    .rev-item.poor    { border-left-color: var(--danger);  background: var(--danger-bg); }
+    .rev-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 800;
+      padding: 2px 8px; border-radius: 4px; margin-bottom: 6px;
+    }
+    .rev-badge.good    { background: var(--success); color: white; }
+    .rev-badge.warning { background: var(--warning); color: white; }
+    .rev-badge.poor    { background: var(--danger);  color: white; }
+    .rev-msg { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .rev-comment { font-size: 13px; color: var(--text-light); }
+    .rev-suggest { font-size: 12px; color: var(--teal); margin-top: 5px; font-style: italic; }
+
+    .score-wrap { background: var(--card); border-radius: var(--rlg); border: 1px solid var(--border-light); padding: 22px; }
+    .score-hero {
+      text-align: center; padding: 22px;
+      background: var(--navy);
+      border-radius: var(--r); color: white; margin-bottom: 20px;
+    }
+    .score-num { font-size: 52px; font-weight: 900; line-height: 1; font-family: var(--font-display); }
+    .score-denom { font-size: 18px; opacity: .65; }
+    .score-lbl { font-size: 12px; opacity: .75; margin-top: 4px; }
+    .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+    .score-row:last-child { margin-bottom: 0; }
+    .score-row-lbl { font-size: 12px; font-weight: 700; flex: 1; color: var(--text); }
+    .score-bar-bg { flex: 2; height: 7px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+    .score-bar { height: 100%; border-radius: 4px; transition: width .9s ease; }
+    .score-row-n { font-size: 12px; font-weight: 800; width: 36px; text-align: right; }
+    .sec-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .8px; }
+    .hl-item { font-size: 13px; color: var(--text-light); margin-bottom: 7px; display: flex; gap: 7px; line-height: 1.5; }
+    .hl-dot { color: var(--gold); font-size: 14px; flex-shrink: 0; }
+    .divider { height: 1px; background: var(--border-light); margin: 16px 0; }
+
+    /* ============================================================
+       CASE VIEW
+       ============================================================ */
+    .case-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .case-block { background: var(--bg); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; }
+    .case-block h4 { font-size: 11px; font-weight: 700; color: var(--teal-dark); margin-bottom: 7px; text-transform: uppercase; letter-spacing: .8px; }
+    .case-block p { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+    .q-chip {
+      background: var(--teal-light); border-left: 3px solid var(--teal);
+      padding: 9px 12px; border-radius: 0 var(--r) var(--r) 0;
+      font-size: 13px; color: var(--text); margin-bottom: 8px;
+      font-style: italic; line-height: 1.5;
+    }
+
+    /* ---- PROFILE SYSTEM ---- */
+    .profile-section { margin-bottom: 20px; }
+    .profile-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--teal-pale);
+      border: 1.5px solid var(--border); border-radius: var(--r);
+    }
+    .profile-bar.has-profile { border-color: var(--teal); background: var(--teal-light); }
+    .profile-bar-icon { font-size: 20px; flex-shrink: 0; }
+    .profile-bar-info { flex: 1; min-width: 0; }
+    .profile-bar-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .profile-bar-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .profile-bar-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .profile-select {
+      padding: 7px 10px; border: 1.5px solid var(--border); border-radius: var(--r);
+      font-size: 12px; color: var(--text); background: white; cursor: pointer;
+      font-family: inherit; max-width: 180px;
+    }
+    .profile-select:focus { border-color: var(--teal); outline: none; }
+
+    .profile-form { margin-top: 12px; padding: 16px; background: var(--white); border: 1px solid var(--teal); border-radius: var(--rlg); }
+    .profile-form-title { font-size: 11px; font-weight: 700; color: var(--teal-dark); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .profile-form .form-group { margin-bottom: 12px; }
+    .profile-form .form-label { font-size: 12px; }
+    .profile-form .form-input { font-size: 13px; padding: 8px 12px; }
+    .profile-form-row { display: flex; gap: 10px; }
+    .profile-form-row > * { flex: 1; }
+    .profile-form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+
+    .history-list { margin-top: 12px; }
+    .history-item {
+      padding: 10px 12px; background: var(--bg); border-radius: var(--r);
+      margin-bottom: 6px; border-left: 3px solid var(--teal-mid);
+      cursor: pointer; transition: background 0.15s, box-shadow 0.15s;
+    }
+    .history-item:hover { background: var(--bg-alt); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .history-item.expanded { cursor: default; border-left-color: var(--teal); background: var(--bg-alt); }
+    .history-header { display: flex; justify-content: space-between; align-items: center; }
+    .history-arrow { font-size: 12px; color: var(--teal); transition: transform 0.2s; flex-shrink: 0; }
+    .history-item.expanded .history-arrow { transform: rotate(90deg); }
+    .history-date { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
+    .history-situ { font-size: 12px; color: var(--text); font-weight: 600; }
+    .history-summary { font-size: 11px; color: var(--text-light); margin-top: 3px; line-height: 1.5; }
+    .history-detail { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+    .history-detail-label { font-size: 10px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px; margin: 8px 0 3px; }
+    .history-detail-label:first-child { margin-top: 0; }
+    .history-detail-text { font-size: 12px; color: var(--text); line-height: 1.6; white-space: pre-wrap; }
+    .history-toggle {
+      font-size: 12px; color: var(--teal); cursor: pointer; margin-top: 8px;
+      background: none; border: none; font-weight: 600; padding: 0;
+    }
+    .history-toggle:hover { text-decoration: underline; }
+
+    /* ---- DETAIL SECTION (HOME) ---- */
+    .detail-section { margin-top: 32px; scroll-margin-top: 20px; }
+    .detail-section-title {
+      font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center;
+      margin-bottom: 22px; text-transform: uppercase; letter-spacing: 2.5px;
+    }
+    .detail-cards { display: flex; flex-direction: column; gap: 18px; }
+    .detail-card {
+      background: var(--card); border-radius: var(--rlg); border: 1px solid var(--border);
+      padding: 20px 22px; scroll-margin-top: 20px; transition: box-shadow .15s;
+    }
+    .detail-card:target, .detail-card.highlighted {
+      box-shadow: 0 0 0 2px var(--teal), 0 4px 16px rgba(11,110,115,0.12);
+    }
+    .detail-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .detail-card-icon { font-size: 28px; flex-shrink: 0; }
+    .detail-card-title { font-size: 15px; font-weight: 700; color: var(--navy); font-family: var(--font-display); }
+    .detail-card-desc { font-size: 13px; color: var(--text-light); line-height: 1.6; margin-bottom: 14px; }
+    .detail-items { display: flex; flex-wrap: wrap; gap: 8px; }
+    .detail-item {
+      background: var(--bg); border-radius: var(--r); padding: 10px 14px;
+      flex: 1 1 calc(50% - 4px); min-width: 200px;
+      border: 1px solid var(--border-light);
+    }
+    .detail-item-name { font-size: 13px; font-weight: 700; color: var(--teal-dark); }
+    .detail-item-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+    .hero-stat.clickable { cursor: pointer; transition: transform .12s, background .12s; border-radius: var(--r); padding: 8px 10px; margin: -8px -10px; }
+    .hero-stat.clickable:hover { transform: translateY(-2px); background: rgba(255,255,255,.07); }
+
+    /* ---- MISC ---- */
+    .error-box {
+      background: var(--danger-bg); border: 1px solid #FECACA;
+      color: #991B1B; border-radius: var(--r);
+      padding: 10px 14px; font-size: 13px; margin-top: 10px;
+    }
+    .spin { display: inline-block; width: 20px; height: 20px; border: 3px solid var(--border); border-top-color: var(--teal); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-wrap { text-align: center; padding: 60px 40px; color: var(--text-muted); }
+    .loading-wrap .spin { width: 32px; height: 32px; margin-bottom: 14px; }
+
+    @media (max-width: 768px) {
+      .chat-layout { grid-template-columns: 1fr; }
+      .guide-panel { display: none; }
+      .mode-cards, .setup-grid, .fb-layout, .case-layout { grid-template-columns: 1fr; }
+      .opt-grid { grid-template-columns: 1fr; }
+      .provider-grid { grid-template-columns: repeat(2,1fr); }
+      .main { padding: 16px; }
+      .home-hero { padding: 32px 22px; }
+      .home-hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ==============================================================
+   CONFIG
+   ============================================================== */
+const PROVIDERS = {
+  anthropic: {
+    name: 'Anthropic',
+    icon: '🟤',
+    color: '#D97706',
+    models: [
+      { id: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4 (推荐)' },
+      { id: 'claude-opus-4-20250514',   label: 'Claude Opus 4' },
+      { id: 'claude-haiku-4-5-20251001',label: 'Claude Haiku 4.5' },
+    ],
+    guide: {
+      zh: {
+        steps: [
+          '访问 Anthropic Console 网站并注册账号',
+          '进入 Dashboard → API Keys 页面',
+          '点击 "Create Key"，复制生成的密钥（以 sk-ant- 开头）',
+          '新用户可获得免费额度，之后按用量付费（需绑定信用卡）',
+        ],
+        url: 'https://console.anthropic.com/settings/keys',
+        urlLabel: '前往 Anthropic Console →',
+        pricing: '按 token 计费 — Sonnet 4: ~$3/$15 per 1M tokens (输入/输出)',
+      },
+      en: {
+        steps: [
+          'Visit the Anthropic Console website and create an account',
+          'Navigate to Dashboard → API Keys',
+          'Click "Create Key" and copy the generated key (starts with sk-ant-)',
+          'New users get free credits; after that, pay-as-you-go (credit card required)',
+        ],
+        url: 'https://console.anthropic.com/settings/keys',
+        urlLabel: 'Go to Anthropic Console →',
+        pricing: 'Pay per token — Sonnet 4: ~$3/$15 per 1M tokens (input/output)',
+      },
+    },
+  },
+  openai: {
+    name: 'OpenAI',
+    icon: '🟢',
+    color: '#10A37F',
+    models: [
+      { id: 'gpt-4o',       label: 'GPT-4o (推荐)' },
+      { id: 'gpt-4o-mini',  label: 'GPT-4o Mini' },
+      { id: 'gpt-4-turbo',  label: 'GPT-4 Turbo' },
+      { id: 'o1-mini',      label: 'o1 Mini' },
+    ],
+    guide: {
+      zh: {
+        steps: [
+          '访问 OpenAI Platform 网站并注册/登录',
+          '进入 API Keys 页面（左侧菜单）',
+          '点击 "Create new secret key"，复制密钥（以 sk- 开头）',
+          '在 Billing 页面充值（最低 $5），密钥需要有余额才能调用',
+        ],
+        url: 'https://platform.openai.com/api-keys',
+        urlLabel: '前往 OpenAI Platform →',
+        pricing: '按 token 计费 — GPT-4o: ~$2.5/$10 per 1M tokens (输入/输出)',
+      },
+      en: {
+        steps: [
+          'Visit the OpenAI Platform website and sign up / log in',
+          'Navigate to the API Keys page (left sidebar)',
+          'Click "Create new secret key" and copy it (starts with sk-)',
+          'Add credit on the Billing page (min $5); the key needs a balance to work',
+        ],
+        url: 'https://platform.openai.com/api-keys',
+        urlLabel: 'Go to OpenAI Platform →',
+        pricing: 'Pay per token — GPT-4o: ~$2.5/$10 per 1M tokens (input/output)',
+      },
+    },
+  },
+  google: {
+    name: 'Google',
+    icon: '🔵',
+    color: '#4285F4',
+    models: [
+      { id: 'gemini-2.0-flash',            label: 'Gemini 2.0 Flash (推荐)' },
+      { id: 'gemini-1.5-pro-latest',       label: 'Gemini 1.5 Pro' },
+      { id: 'gemini-1.5-flash-latest',     label: 'Gemini 1.5 Flash' },
+    ],
+    guide: {
+      zh: {
+        steps: [
+          '访问 Google AI Studio 网站，用 Google 账号登录',
+          '点击左侧 "Get API key" → "Create API key"',
+          '选择或新建一个 Google Cloud 项目，生成密钥（以 AIza 开头）',
+          'Gemini API 提供慷慨的免费额度，Flash 模型免费用量极高',
+        ],
+        url: 'https://aistudio.google.com/apikey',
+        urlLabel: '前往 Google AI Studio →',
+        pricing: 'Flash 模型有大量免费额度；Pro: ~$1.25/$5 per 1M tokens',
+      },
+      en: {
+        steps: [
+          'Visit Google AI Studio and sign in with your Google account',
+          'Click "Get API key" on the left → "Create API key"',
+          'Select or create a Google Cloud project to generate the key (starts with AIza)',
+          'Gemini API offers generous free tiers; Flash models have very high free limits',
+        ],
+        url: 'https://aistudio.google.com/apikey',
+        urlLabel: 'Go to Google AI Studio →',
+        pricing: 'Flash models have generous free tiers; Pro: ~$1.25/$5 per 1M tokens',
+      },
+    },
+  },
+  openrouter: {
+    name: 'OpenRouter',
+    icon: '🟣',
+    color: '#7C3AED',
+    models: [
+      { id: 'anthropic/claude-sonnet-4',  label: 'Claude Sonnet 4' },
+      { id: 'openai/gpt-4o',              label: 'GPT-4o' },
+      { id: 'google/gemini-2.0-flash-001',label: 'Gemini 2.0 Flash' },
+      { id: 'meta-llama/llama-3.3-70b-instruct', label: 'Llama 3.3 70B' },
+    ],
+    customModel: true,
+    guide: {
+      zh: {
+        steps: [
+          '访问 OpenRouter 网站并注册账号（支持 Google/GitHub 登录）',
+          '进入 Dashboard → Keys 页面',
+          '点击 "Create Key"，复制密钥（以 sk-or- 开头）',
+          '在 Credits 页面充值（最低 $5）；一个密钥可使用所有模型',
+        ],
+        url: 'https://openrouter.ai/keys',
+        urlLabel: '前往 OpenRouter →',
+        pricing: '统一入口访问所有模型，按各模型官方定价 + 少量手续费',
+      },
+      en: {
+        steps: [
+          'Visit OpenRouter and sign up (Google/GitHub login supported)',
+          'Go to Dashboard → Keys page',
+          'Click "Create Key" and copy it (starts with sk-or-)',
+          'Add credits on the Credits page (min $5); one key works for all models',
+        ],
+        url: 'https://openrouter.ai/keys',
+        urlLabel: 'Go to OpenRouter →',
+        pricing: 'Unified access to all models; priced at official rates + small markup',
+      },
+    },
+  },
+};
+
+/* ==============================================================
+   STATE
+   ============================================================== */
+let S = {
+  lang: 'zh',
+  provider: sessionStorage.getItem('ccp_prov') || 'anthropic',
+  apiKey: sessionStorage.getItem('ccp_key') || '',
+  selectedModel: '',
+  view: 'home',
+  mode: null,
+  difficulty: 'beginner',
+  coachModel: 'GROW',
+  scenario: null,
+  customScenarioText: '',
+  activeScenario: '',
+  messages: [],
+  userMessages: [],
+  turnCount: 0,
+  isLoading: false,
+  feedback: null,
+  feedbackLoading: false,
+  caseOutput: null,
+  caseOutputLang: '',
+  caseLoading: false,
+  caseSitu: '',
+  caseTried: '',
+  caseGoal: '',
+  feedbackLang: '',
+  error: '',
+  // Profile system
+  profileId: null,        // currently selected profile ID (null = no profile)
+  showProfileForm: false, // show create/edit form
+  editingProfileId: null, // if editing, which profile
+};
+
+/* ==============================================================
+   EMPLOYEE / CASE PROFILE SYSTEM  (persisted in localStorage)
+   Profile schema:
+   { id, name, role, dept, personality, notes, history: [{date, situ, tried, goal, summary}] }
+   ============================================================== */
+const PROFILE_STORAGE_KEY = 'cci_profiles';
+
+function loadProfiles() {
+  try { return JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+function saveProfiles(profiles) {
+  localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profiles));
+}
+function getProfile(id) {
+  return loadProfiles().find(p => p.id === id) || null;
+}
+function createProfile(data) {
+  const profiles = loadProfiles();
+  const profile = {
+    id: 'p_' + Date.now(),
+    name: data.name || '',
+    role: data.role || '',
+    dept: data.dept || '',
+    personality: data.personality || '',
+    notes: data.notes || '',
+    history: [],
+    createdAt: new Date().toISOString(),
+  };
+  profiles.push(profile);
+  saveProfiles(profiles);
+  return profile;
+}
+function updateProfile(id, data) {
+  const profiles = loadProfiles();
+  const idx = profiles.findIndex(p => p.id === id);
+  if (idx < 0) return null;
+  Object.assign(profiles[idx], data);
+  saveProfiles(profiles);
+  return profiles[idx];
+}
+function deleteProfile(id) {
+  const profiles = loadProfiles().filter(p => p.id !== id);
+  saveProfiles(profiles);
+  if (S.profileId === id) S.profileId = null;
+}
+function addHistoryToProfile(id, entry) {
+  const profiles = loadProfiles();
+  const p = profiles.find(p => p.id === id);
+  if (!p) return;
+  p.history = p.history || [];
+  p.history.unshift({
+    date: new Date().toISOString(),
+    situ: entry.situ || '',
+    tried: entry.tried || '',
+    goal: entry.goal || '',
+    summary: entry.summary || '',
+  });
+  // Keep max 20 history entries
+  if (p.history.length > 20) p.history = p.history.slice(0, 20);
+  saveProfiles(profiles);
+}
+
+// Track which history items are expanded (by index)
+const expandedHistory = new Set();
+function toggleHistory(idx) {
+  if (expandedHistory.has(idx)) expandedHistory.delete(idx);
+  else expandedHistory.add(idx);
+  render();
+}
+
+// Set default model for current provider
+function defaultModel() {
+  return PROVIDERS[S.provider]?.models?.[0]?.id || '';
+}
+S.selectedModel = sessionStorage.getItem('ccp_model') || defaultModel();
+
+function set(u) { Object.assign(S, u); render(); }
+
+/* ==============================================================
+   I18N
+   ============================================================== */
+const T = {
+  zh: {
+    l1: 'AI教练对话练习平台',
+    l2: 'Coaching Culture International',
+    langBtn: 'EN',
+    heroBadge: '基于《建立可持续的教练文化》· Eng Hooi',
+    heroTitle: 'AI教练对话\n练习平台',
+    heroTitleSpan: '练习平台',
+    heroDesc: '帮助企业经理通过AI模拟对话练习教练式对话技巧，或输入实际职场案例获取基于教练框架的解决方案。',
+    stat1n:'6', stat1l:'教练模型',
+    stat2n:'3', stat2l:'难度级别',
+    stat3n:'6+', stat3l:'练习场景',
+    stat4n:'5', stat4l:'评分维度',
+    apiSec: '🔒 API Key 仅在您的浏览器本地运行，不会上传至任何第三方服务器。关闭标签页后自动清除。',
+    apiLabel: 'API Key',
+    apiPh: (p) => ({ anthropic:'sk-ant-api03-...', openai:'sk-...', google:'AIza...', openrouter:'sk-or-...' }[p] || 'API Key...'),
+    modelLabel: '选择模型',
+    customModelLabel: '自定义模型 ID（可选）',
+    customModelPh: '例如：openai/gpt-4o 或 mistralai/mistral-7b-instruct',
+    mode1: '角色扮演练习',
+    mode1d: '您扮演教练/经理，AI扮演员工。通过真实对话场景练习教练式技巧，结束后获得详细反馈报告。',
+    mode1cta: '开始练习 →',
+    mode2: '实际案例分析',
+    mode2d: '描述您在职场中遇到的真实管理难题，AI基于教练文化框架给出诊断和解决方案。',
+    mode2cta: '输入案例 →',
+    back: '← 返回首页',
+    diff: '难度级别',
+    d1t:'初级', d1d:'员工配合度高，问题简单清晰',
+    d2t:'中级', d2d:'员工有些抗拒，需要引导才愿意开口',
+    d3t:'高级', d3d:'员工防御性强、情绪化、抗拒改变',
+    modelSel: '选择教练模型',
+    scenSel: '选择练习场景',
+    scenCustom: '✏️ 自定义场景',
+    customLbl: '自定义场景描述',
+    customPh: '描述您想练习的场景，例如：团队成员对绩效评估结果强烈不满…',
+    startBtn: '开始对话练习 →',
+    endBtn: '结束对话',
+    youLbl: '您（教练/经理）',
+    aiLbl: '员工',
+    inputPh: '输入您的教练式问题...',
+    modelGuide: '教练模型指南',
+    tips: '教练技巧提示',
+    tipList: ['使用开放式问题（什么 / 怎么 / 如何）', '避免直接给出建议或答案', '反映对方情绪，表达同理心', '聚焦于未来和行动，而非过去错误', '保持好奇，不做评判'],
+    fbTitle: '对话反馈报告',
+    fbLoading: '正在分析您的对话，生成详细反馈报告…',
+    lineTitle: '逐句点评',
+    scoreTitle: '整体评分',
+    totalLbl: '总分',
+    s1:'倾听与观察', s2:'提问质量', s3:'遵循模型步骤', s4:'避免给答案', s5:'建立安全空间',
+    hlTitle: '✨ 本次亮点',
+    impTitle: '📈 需要改进',
+    nextTitle: '🎯 下次建议',
+    backHome: '← 返回首页',
+    again: '再次练习',
+    gLbl:'✅ 良好', wLbl:'⚠️ 可改进', pLbl:'❌ 非教练式',
+    sugPfx: '💡 建议：',
+    caseTitle: '实际案例分析',
+    caseSub: '描述您的管理难题，AI基于教练文化框架给出具体建议',
+    c1:'① 目前遇到什么情况？', c1p:'描述员工/团队面临的具体问题…',
+    c2:'② 您已尝试了什么方法？', c2p:'列出您已尝试过的沟通或管理方式…',
+    c3:'③ 您希望达到什么结果？', c3p:'描述期望的改变或成果…',
+    analyzeBtn: '分析案例 →',
+    analyzing: '正在分析…',
+    diagLbl: '问题诊断',
+    modelRecLbl: '推荐教练模型',
+    qsLbl: '建议开场问题',
+    warnLbl: '注意事项',
+    sysStart: '教练对话开始 — AI将扮演员工角色',
+    turnLbl: (n) => `第 ${n} / 12 轮`,
+    errKey: '请先输入 API Key',
+    errSc: '请选择一个练习场景',
+    errApi: 'API 请求失败 — ',
+    apiKeyMissing: '请先输入您的 API Key 才能开始',
+    detailTitle: '平台详解',
+    detailModelsTitle: '6 大教练模型',
+    detailModelsDesc: '源自《建立可持续的教练文化》，涵盖国际主流的教练对话框架，每个模型提供清晰的步骤指引和示范问题。',
+    detailDiffTitle: '3 种难度级别',
+    detailDiffDesc: 'AI扮演的员工难度递进，从配合到抗拒，帮助您在安全环境中逐步提升应对复杂情境的能力。',
+    detailScenTitle: '6+ 练习场景',
+    detailScenDesc: '覆盖职场中最常见的管理痛点，还支持自定义场景，让练习贴合您的真实工作情境。',
+    detailDimTitle: '5 维评分体系',
+    detailDimDesc: 'AI 从五个维度评估您的教练对话表现，提供 1-10 分的量化评分和具体改进建议。',
+    scenarios: [
+      '下属不主动汇报，执行力差，常延误交付',
+      '员工明显抗拒新推行的数字化流程',
+      '高潜力员工情绪低落，有离职迹象',
+      '跨部门沟通困难，合作项目屡遭阻碍',
+      '团队成员连续两个季度绩效未达标',
+      '新员工难以融入团队，感到被排除在外',
+    ],
+  },
+  en: {
+    l1: 'AI Coaching Practice Platform',
+    l2: 'Coaching Culture International',
+    langBtn: '中文',
+    heroBadge: 'Based on "Building a Sustainable Coaching Culture" · Eng Hooi',
+    heroTitle: 'AI Coaching\nPractice Platform',
+    heroTitleSpan: 'Practice Platform',
+    heroDesc: 'Help managers practice coaching conversations via AI simulation, or get coaching-based solutions for real workplace management challenges.',
+    stat1n:'6', stat1l:'Coaching Models',
+    stat2n:'3', stat2l:'Difficulty Levels',
+    stat3n:'6+', stat3l:'Scenarios',
+    stat4n:'5', stat4l:'Score Dimensions',
+    apiSec: '🔒 Your API Key runs only in your browser and is never sent to any third-party server. Clears on tab close.',
+    apiLabel: 'API Key',
+    apiPh: (p) => ({ anthropic:'sk-ant-api03-...', openai:'sk-...', google:'AIza...', openrouter:'sk-or-...' }[p] || 'API Key...'),
+    modelLabel: 'Select Model',
+    customModelLabel: 'Custom Model ID (optional)',
+    customModelPh: 'e.g. openai/gpt-4o or mistralai/mistral-7b-instruct',
+    mode1: 'Role-Play Practice',
+    mode1d: 'You play the manager/coach. AI plays the employee. Practice real coaching conversations and get a detailed feedback report.',
+    mode1cta: 'Start Practice →',
+    mode2: 'Real Case Analysis',
+    mode2d: 'Describe a real management challenge. AI provides diagnosis and coaching solutions based on the framework.',
+    mode2cta: 'Enter Case →',
+    back: '← Back to Home',
+    diff: 'Difficulty Level',
+    d1t:'Beginner', d1d:'Employee is cooperative, clear and simple issues',
+    d2t:'Intermediate', d2d:'Employee is somewhat resistant, needs gentle guidance',
+    d3t:'Advanced', d3d:'Employee is defensive, emotional, resistant to change',
+    modelSel: 'Choose Coaching Model',
+    scenSel: 'Choose Practice Scenario',
+    scenCustom: '✏️ Custom Scenario',
+    customLbl: 'Describe Your Custom Scenario',
+    customPh: 'Describe the scenario you want to practice, e.g. Team member strongly disagrees with performance review results…',
+    startBtn: 'Start Practice Session →',
+    endBtn: 'End Session',
+    youLbl: 'You (Coach/Manager)',
+    aiLbl: 'Employee',
+    inputPh: 'Type your coaching question...',
+    modelGuide: 'Coaching Model Guide',
+    tips: 'Coaching Tips',
+    tipList: ['Use open questions (What / How / Tell me more)', 'Avoid giving advice or answers directly', 'Reflect emotions and show empathy', 'Focus on future actions, not past mistakes', 'Stay curious and non-judgmental'],
+    fbTitle: 'Session Feedback Report',
+    fbLoading: 'Analyzing your conversation and generating feedback report…',
+    lineTitle: 'Line-by-Line Review',
+    scoreTitle: 'Overall Score',
+    totalLbl: 'Total',
+    s1:'Listening & Observation', s2:'Question Quality', s3:'Model Adherence', s4:'Avoiding Advice', s5:'Creating Safe Space',
+    hlTitle: '✨ Session Highlights',
+    impTitle: '📈 Areas to Improve',
+    nextTitle: '🎯 Next Practice',
+    backHome: '← Back to Home',
+    again: 'Practice Again',
+    gLbl:'✅ Good', wLbl:'⚠️ Can Improve', pLbl:'❌ Non-Coaching',
+    sugPfx: '💡 Suggestion: ',
+    caseTitle: 'Real Case Analysis',
+    caseSub: 'Describe your management challenge. AI gives targeted coaching advice.',
+    c1:'① What is the current situation?', c1p:'Describe the specific employee/team issue…',
+    c2:'② What have you already tried?', c2p:'List communication or management approaches you have attempted…',
+    c3:'③ What outcome do you want?', c3p:'Describe the desired change or result…',
+    analyzeBtn: 'Analyze Case →',
+    analyzing: 'Analyzing…',
+    diagLbl: 'Problem Diagnosis',
+    modelRecLbl: 'Recommended Coaching Model',
+    qsLbl: 'Suggested Opening Questions',
+    warnLbl: 'Pitfalls & Warnings',
+    sysStart: 'Coaching session started — AI is playing the employee',
+    turnLbl: (n) => `Turn ${n} / 12`,
+    errKey: 'Please enter your API Key first',
+    errSc: 'Please choose a practice scenario',
+    errApi: 'API request failed — ',
+    apiKeyMissing: 'Please enter your API Key to get started',
+    detailTitle: 'Platform Overview',
+    detailModelsTitle: '6 Coaching Models',
+    detailModelsDesc: 'Based on "Building a Sustainable Coaching Culture", covering internationally recognized coaching frameworks with clear step-by-step guidance and sample questions.',
+    detailDiffTitle: '3 Difficulty Levels',
+    detailDiffDesc: 'The AI employee ranges from cooperative to highly resistant, helping you progressively build skills for handling complex situations in a safe environment.',
+    detailScenTitle: '6+ Practice Scenarios',
+    detailScenDesc: 'Covering the most common workplace management challenges, plus custom scenarios to match your real work situations.',
+    detailDimTitle: '5 Score Dimensions',
+    detailDimDesc: 'AI evaluates your coaching conversation across five dimensions, providing quantitative 1-10 scores and specific improvement suggestions.',
+    scenarios: [
+      'Subordinate lacks initiative, poor execution, often misses deadlines',
+      'Employee openly resists newly implemented digital workflows',
+      'High-potential employee disengaged, showing signs of wanting to leave',
+      'Cross-department communication breaks down, collaboration suffers',
+      'Team member has missed performance targets for 2 consecutive quarters',
+      'New employee struggles to integrate, feels excluded from the team',
+    ],
+  },
+};
+function t(k, ...a) {
+  const v = T[S.lang][k];
+  return typeof v === 'function' ? v(...a) : (v ?? k);
+}
+
+/* ==============================================================
+   TIP MODAL DATA  (sourced from "建立可持续的教练文化" by Eng Hooi)
+   ============================================================== */
+const TIP_DATA = {
+  zh: [
+    {
+      icon: '❓',
+      title: '使用开放式问题',
+      sub: '什么 / 怎么 / 如何 开头的问题最有力',
+      desc: '开放式问题是教练式对话的核心工具。与封闭式问题不同，开放式问题能打开对话空间，引导员工自我探索，激发内在洞见。ICF核心能力框架明确指出：教练需要"提出有力的问题，从而拓展洞察力，促进新发现和行动力"。',
+      quote: '保持密切的对话，提出正确的问题，帮助认清真正的意义/问题，使学员能从不同的角度看问题。教练对话会为教练和学员带来重要的洞察力（所谓"恍然大悟"的瞬间）。',
+      page: '《建立可持续的教练文化》第60页 · ICF核心能力框架',
+      tips: [
+        '用"什么"开头：如"你希望达到什么？"',
+        '用"怎么/如何"开头：如"你会怎么处理这件事？"',
+        '避免以"为什么"开头——容易让人感到被质疑',
+        '避免引导性问题：如"你是不是应该……？"',
+        '一次只问一个问题，给对方充足的思考空间',
+      ],
+    },
+    {
+      icon: '🤐',
+      title: '避免直接给出建议或答案',
+      sub: '相信员工有能力找到自己的答案',
+      desc: '教练与指导最大的区别在于：教练不给答案，而是通过提问引导员工自己发现答案。当员工自己找到解决方案时，他们的执行意愿和内在动力会远高于被告知答案的情况。授权比给答案更持久。',
+      quote: '教练只是提出问题以释放内在潜力；教练是关于授予个人所有权。制定教练文化计划需要给予员工适当权利，予员工信任和关怀，这对于建立可持续的教练文化至关重要。',
+      page: '《建立可持续的教练文化》第23页 & 第133页',
+      tips: [
+        '当你想给建议时，先把它变成一个问题：如"你觉得有哪些方法可以解决这个问题？"',
+        '用沉默给对方思考的空间——停顿是有力量的',
+        '说"你认为呢？"代替直接回答',
+        '如果员工主动要求建议，可以先问："你自己有没有什么想法？"',
+        '记住：你的答案不一定比他们自己找到的更有效',
+      ],
+    },
+    {
+      icon: '💗',
+      title: '反映对方情绪，表达同理心',
+      sub: '先被理解，才愿意改变',
+      desc: '同理心是建立教练式对话安全空间的关键。当员工感到被真正理解和接纳时，才会放下防备、开放分享。ICF核心能力框架强调：教练需要"从别人的角度看问题，不要对别人做任何评判，没有先入为主的答案。"',
+      quote: '表现出同理心：从别人的角度看问题，不要对别人做任何评判，没有先入为主的答案。积极倾听：收集全面的信息，充分理解学员的言语、思想、动机和感受，从而推进进展。',
+      page: '《建立可持续的教练文化》第60页 · ICF国际教练联合会核心能力',
+      tips: [
+        '先说出你感知到的情绪："我感觉到你现在有些……"',
+        '用身体语言表达关注：点头、保持眼神接触',
+        '复述对方的话：让他知道你在认真听',
+        '不评判情绪的"对错"——情绪本身没有好坏之分',
+        '在他说完之前，不要急着提问或给解决方案',
+      ],
+    },
+    {
+      icon: '🚀',
+      title: '聚焦于未来和行动',
+      sub: '把目光从问题移向可能性',
+      desc: '教练式对话的核心方向是面向未来，而非纠结于过去。帮助员工从"发生了什么"转向"我可以做什么"，从问题导向转向可能性导向。这种转换能激发主动性和改变意愿。',
+      quote: '勇于行动：了解、确定学员冲动和犹豫的方面，这些因素可能使他偏离轨道，也可能会帮助他。获得学员的承诺，准备就绪，现在就采取行动！鼓励学员采取行动，总结学习成果，专注于一个目标，实现进步，保持势头。',
+      page: '《建立可持续的教练文化》第61-62页 · EMCC能力框架',
+      tips: [
+        '用"你接下来会怎么做？"代替"之前发生了什么？"',
+        '聚焦可能性："如果没有任何限制，你会怎么做？"',
+        '问"你第一步打算做什么？何时开始？"',
+        '帮助员工把目标具体化：谁、什么、什么时候',
+        '在对话结束时确认行动承诺',
+      ],
+    },
+    {
+      icon: '🔍',
+      title: '保持好奇，不做评判',
+      sub: '以探索的心态进入每一次对话',
+      desc: '好奇心是优秀教练的核心特质之一。保持真诚的好奇——对员工的想法、感受和动机感兴趣，而非急于评判或得出结论。这种态度能创造心理安全感，让员工愿意真实表达自我。',
+      quote: '如果所有的管理者都能表现出良好的教练辅导技巧（倾听、同理心、好奇心、挑战现状、提出提问、与员工交心），企业就更有可能成功和持续发展。经理有教练心态的核心原因之一：他们充满好奇心。',
+      page: '《建立可持续的教练文化》第18页 & 第146页',
+      tips: [
+        '用"这对你来说意味着什么？"探索更深的含义',
+        '每次对话都把对方当作独特的个体，不预设结论',
+        '当你有想法时，先问："能多说说吗？"',
+        '不打断、不纠正、不急着"帮他理清"',
+        '注意自己内心的假设——把它们暂时放下',
+      ],
+    },
+  ],
+  en: [
+    {
+      icon: '❓',
+      title: 'Use Open Questions',
+      sub: 'Start with What / How / Tell me more',
+      desc: 'Open questions are the core tool of coaching conversations. Unlike closed questions, they open space for the employee to explore, reflect, and discover their own insights. The ICF core competency framework states: coaches must "ask powerful questions that expand insight, foster new discoveries, and drive action."',
+      quote: 'Maintain close dialogue, ask the right questions to help clarify the real meaning/issue, enabling the coachee to see things from different angles. Coaching conversations bring important insights — the "aha moments" — for both the coach and the coachee.',
+      page: '"Building a Sustainable Coaching Culture" p.60 · ICF Core Competencies',
+      tips: [
+        'Use "What" questions: e.g. "What do you want to achieve?"',
+        'Use "How" questions: e.g. "How would you handle this?"',
+        'Avoid "Why" — it can make people feel defensive',
+        'Avoid leading questions: e.g. "Shouldn\'t you just…?"',
+        'Ask one question at a time and let silence do its work',
+      ],
+    },
+    {
+      icon: '🤐',
+      title: 'Avoid Giving Advice or Answers',
+      sub: 'Trust the employee to find their own solutions',
+      desc: 'The biggest difference between coaching and mentoring is this: coaches don\'t give answers, they ask questions that help the employee find their own. When people find their own solutions, their motivation to act is far stronger than when told what to do. Empowerment outlasts any advice.',
+      quote: 'Coaching is simply asking questions to unlock inner potential; coaching is about giving individuals ownership. Building a coaching culture requires giving employees appropriate power, trust, and care — this is critical to building a sustainable coaching culture.',
+      page: '"Building a Sustainable Coaching Culture" p.23 & p.133',
+      tips: [
+        'Turn your advice into a question: "What approaches do you think could work here?"',
+        'Use silence — a pause gives the employee space to think',
+        'Say "What do you think?" instead of answering directly',
+        'If they ask for advice, first ask: "What ideas do you already have?"',
+        'Remember: their own answer is usually more effective than yours',
+      ],
+    },
+    {
+      icon: '💗',
+      title: 'Reflect Emotions & Show Empathy',
+      sub: 'People change when they first feel understood',
+      desc: 'Empathy is the key to creating a psychologically safe space for coaching conversations. When employees feel genuinely heard and accepted, they lower their defenses and open up. The ICF framework emphasizes: coaches must "see things from others\' perspectives, without judgment, without pre-set answers."',
+      quote: 'Show empathy: see things from others\' perspective, do not judge others, have no pre-set answers. Active listening: gather comprehensive information to fully understand the coachee\'s words, thoughts, motivations and feelings, in order to advance progress.',
+      page: '"Building a Sustainable Coaching Culture" p.60 · ICF Core Competencies',
+      tips: [
+        'Name the emotion you sense: "It sounds like you\'re feeling frustrated about…"',
+        'Use body language to show attention: nod, maintain eye contact',
+        'Reflect back what they say so they know you\'re truly listening',
+        'Don\'t judge whether an emotion is "right or wrong" — emotions just are',
+        'Don\'t rush to question or problem-solve before they\'ve finished speaking',
+      ],
+    },
+    {
+      icon: '🚀',
+      title: 'Focus on Future & Action',
+      sub: 'Shift attention from the problem to the possibility',
+      desc: 'Coaching conversations are fundamentally future-oriented. Help the employee move from "what happened" to "what can I do," from problem-focus to possibility-focus. This shift unlocks initiative and the desire to change.',
+      quote: 'Move to action: identify what the coachee is motivated and hesitant about — these may derail or help them. Get the coachee\'s commitment, ready to act now! Summarize learnings, focus on one goal, achieve progress, maintain momentum, and encourage action.',
+      page: '"Building a Sustainable Coaching Culture" p.61–62 · EMCC Competency Framework',
+      tips: [
+        'Ask "What will you do next?" instead of "What went wrong?"',
+        'Explore possibility: "If nothing held you back, what would you do?"',
+        'Ask "What is your first step? When will you start?"',
+        'Help make goals concrete: who, what, when',
+        'End the conversation with a confirmed action commitment',
+      ],
+    },
+    {
+      icon: '🔍',
+      title: 'Stay Curious, Stay Non-Judgmental',
+      sub: 'Enter every conversation with a spirit of exploration',
+      desc: 'Curiosity is one of the core qualities of an excellent coach. Stay genuinely curious about the employee\'s thoughts, feelings, and motivations — rather than rushing to judge or conclude. This attitude creates psychological safety and helps people express themselves authentically.',
+      quote: 'If all managers could demonstrate good coaching skills (listening, empathy, curiosity, challenging the status quo, asking questions, connecting with employees), organizations would be far more likely to succeed and sustain growth. Curiosity is one of the four core reasons managers develop a coaching mindset.',
+      page: '"Building a Sustainable Coaching Culture" p.18 & p.146',
+      tips: [
+        'Ask "What does this mean to you?" to explore deeper meaning',
+        'Treat each employee as unique — don\'t pre-assume their situation',
+        'When you have an opinion, first ask: "Can you tell me more?"',
+        'Don\'t interrupt, correct, or rush to "clarify" for them',
+        'Notice your own internal assumptions — and set them aside',
+      ],
+    },
+  ],
+};
+
+/* ==============================================================
+   COACHING MODELS
+   ============================================================== */
+const MODELS = {
+  GROW: { steps: { zh:[
+    {l:'G',n:'目标 Goal',d:'明确本次对话想达成的目标',q:'"你今天希望从这次对话中得到什么？"'},
+    {l:'R',n:'现实 Reality',d:'探索当前实际状况',q:'"目前的情况具体是怎样的？"'},
+    {l:'O',n:'选择 Options',d:'探索所有可能的行动方案',q:'"你觉得可以采取哪些行动？还有呢？"'},
+    {l:'W',n:'意愿 Will',d:'确认行动计划和承诺',q:'"你打算具体怎么做？第一步是什么？"'},
+  ], en:[
+    {l:'G',n:'Goal',d:'Clarify what to achieve today',q:'"What would you like to get from this conversation?"'},
+    {l:'R',n:'Reality',d:'Explore the current situation',q:'"What is actually happening right now?"'},
+    {l:'O',n:'Options',d:'Generate all possible options',q:'"What could you do? What else?"'},
+    {l:'W',n:'Will / Way Forward',d:'Commit to specific actions',q:'"What will you do? What is your first step?"'},
+  ]}},
+  CLEAR: { steps: { zh:[
+    {l:'C',n:'签约 Contract',d:'设定对话议程，明确期望',q:'"今天你想聊哪方面的事情？"'},
+    {l:'L',n:'倾听 Listen',d:'深度积极倾听，理解全貌',q:'"能多说说你的感受吗？"'},
+    {l:'E',n:'探索 Explore',d:'探索可能性与深层动因',q:'"这件事对你来说意味着什么？"'},
+    {l:'A',n:'行动 Action',d:'商定具体行动步骤',q:'"你打算采取什么行动？"'},
+    {l:'R',n:'回顾 Review',d:'总结收获，确认下一步',q:'"今天最大的收获是什么？"'},
+  ], en:[
+    {l:'C',n:'Contract',d:'Set the agenda and expectations',q:'"What do you want to focus on today?"'},
+    {l:'L',n:'Listen',d:'Listen deeply and actively',q:'"Can you tell me more about how you feel?"'},
+    {l:'E',n:'Explore',d:'Explore possibilities and deeper drivers',q:'"What does this mean to you?"'},
+    {l:'A',n:'Action',d:'Agree on specific actions',q:'"What action will you take?"'},
+    {l:'R',n:'Review',d:'Review learnings and confirm next steps',q:'"What was your biggest takeaway today?"'},
+  ]}},
+  OSKAR: { steps: { zh:[
+    {l:'O',n:'结果 Outcome',d:'明确期望达成的最终结果',q:'"如果一切顺利，你希望达到什么？"'},
+    {l:'S',n:'量化 Scaling',d:'用1-10分评估当前进展',q:'"如果满分是10，你现在在哪个位置？"'},
+    {l:'K',n:'知识资源 Know-how',d:'识别现有优势和可用资源',q:'"你已经具备哪些能帮助你的资源或优势？"'},
+    {l:'A',n:'确认行动 Affirm',d:'认可进展并确定行动步骤',q:'"你下一步打算做什么？"'},
+    {l:'R',n:'回顾 Review',d:'回顾进展，强化学习',q:'"回顾一下，你取得了哪些进步？"'},
+  ], en:[
+    {l:'O',n:'Outcome',d:'Clarify the desired outcome',q:'"If things go well, what would success look like?"'},
+    {l:'S',n:'Scaling',d:'Rate current progress 1–10',q:'"On a scale of 1-10, where are you now?"'},
+    {l:'K',n:'Know-how',d:'Identify strengths and resources',q:'"What resources or strengths do you already have?"'},
+    {l:'A',n:'Affirm & Action',d:'Acknowledge progress, agree on actions',q:'"What will you do next?"'},
+    {l:'R',n:'Review',d:'Review progress and reinforce learning',q:'"Looking back, what progress have you made?"'},
+  ]}},
+  ACHIEVE: { steps: { zh:[
+    {l:'A',n:'评估 Assess',d:'全面评估当前状况',q:'"现在的状况整体是怎样的？"'},
+    {l:'C',n:'头脑风暴 Creative',d:'创意性地探索各种可能',q:'"不设限地想想，你有哪些选择？"'},
+    {l:'H',n:'明确目标 Hone',d:'细化和明确核心目标',q:'"所有目标中，最重要的是哪个？"'},
+    {l:'I',n:'启动选项 Initiate',d:'深入探索各个选项',q:'"这个方案具体怎么实施？"'},
+    {l:'E',n:'评估方案 Evaluate',d:'评估每个方案的可行性',q:'"哪个方案对你来说最实际可行？"'},
+    {l:'V',n:'制定计划 Valid',d:'制定具体行动计划',q:'"你的行动计划是什么？时间节点呢？"'},
+    {l:'E',n:'激励势头 Encourage',d:'激励并确认前行动力',q:'"有什么能帮助你坚持下去？"'},
+  ], en:[
+    {l:'A',n:'Assess',d:'Assess the full situation',q:'"How would you describe the overall situation?"'},
+    {l:'C',n:'Creative Brainstorm',d:'Explore options without limits',q:'"Without constraints, what options do you have?"'},
+    {l:'H',n:'Hone Goals',d:'Clarify and refine the core goal',q:'"Of all your goals, which is most important?"'},
+    {l:'I',n:'Initiate Options',d:'Explore each option deeply',q:'"How exactly would you implement this?"'},
+    {l:'E',n:'Evaluate Options',d:'Evaluate feasibility',q:'"Which option is most realistic for you?"'},
+    {l:'V',n:'Valid Action Plan',d:'Create a concrete action plan',q:'"What is your action plan and timeline?"'},
+    {l:'E',n:'Encourage Momentum',d:'Encourage and confirm forward momentum',q:'"What will help you stay on track?"'},
+  ]}},
+  PRACTICE: { steps: { zh:[
+    {l:'P',n:'识别问题',d:'明确核心问题所在',q:'"你最想解决的核心问题是什么？"'},
+    {l:'R',n:'现实目标',d:'设定切实可行的目标',q:'"什么是对你来说现实可实现的目标？"'},
+    {l:'A',n:'替代方案',d:'探索不同的解决方案',q:'"除了这个，还有其他方法吗？"'},
+    {l:'C',n:'后果考量',d:'考虑各方案的利弊',q:'"如果这么做，会有什么后果？"'},
+    {l:'T',n:'目标方案',d:'选定最优方案',q:'"综合考虑，哪个方案最适合你？"'},
+    {l:'I',n:'实施计划',d:'规划具体实施步骤',q:'"你计划怎么一步步推进？"'},
+    {l:'C',n:'认可进步',d:'认可成就与进步',q:'"你为自己今天的进步感到如何？"'},
+    {l:'E',n:'评估效果',d:'评估实施效果',q:'"你将如何知道自己成功了？"'},
+  ], en:[
+    {l:'P',n:'Problem',d:'Clarify the core problem',q:'"What is the core problem you most want to solve?"'},
+    {l:'R',n:'Realistic Goals',d:'Set achievable goals',q:'"What is a realistic goal for you?"'},
+    {l:'A',n:'Alternative Solutions',d:'Explore different solutions',q:'"Besides that, what other approaches exist?"'},
+    {l:'C',n:'Consequences',d:'Consider pros and cons',q:'"If you do this, what might happen?"'},
+    {l:'T',n:'Target Solution',d:'Choose the best option',q:'"Considering everything, which works best for you?"'},
+    {l:'I',n:'Implementation',d:'Plan implementation steps',q:'"How will you move forward step by step?"'},
+    {l:'C',n:'Celebration',d:'Acknowledge achievements',q:'"How do you feel about the progress you made today?"'},
+    {l:'E',n:'Evaluation',d:'Evaluate effectiveness',q:'"How will you know you have succeeded?"'},
+  ]}},
+  FUEL: { steps: { zh:[
+    {l:'F',n:'框架 Frame',d:'设定对话的框架和背景',q:'"你希望今天的对话聚焦在哪里？"'},
+    {l:'U',n:'理解现状 Understand',d:'深入理解当前状态',q:'"现在的情况是怎样的？你有什么感受？"'},
+    {l:'E',n:'探索期望 Explore',d:'探索期望达到的状态',q:'"你希望事情变成什么样？"'},
+    {l:'L',n:'规划成功 Lay Out',d:'规划迈向成功的具体步骤',q:'"为了达到这个目标，你的下一步是什么？"'},
+  ], en:[
+    {l:'F',n:'Frame',d:'Set context and frame for the talk',q:'"Where would you like to focus today?"'},
+    {l:'U',n:'Understand',d:'Deeply understand the current state',q:'"What is happening now? How do you feel about it?"'},
+    {l:'E',n:'Explore',d:'Explore the ideal future state',q:'"What would you like things to look like?"'},
+    {l:'L',n:'Lay Out',d:'Plan concrete steps toward success',q:'"What is your next step to get there?"'},
+  ]}},
+};
+const MODEL_DESC = {
+  GROW: { zh:'目标→现实→选择→意愿', en:'Goal→Reality→Options→Will' },
+  CLEAR: { zh:'签约→倾听→探索→行动→回顾', en:'Contract→Listen→Explore→Action→Review' },
+  OSKAR: { zh:'结果→量化→资源→行动→回顾', en:'Outcome→Scaling→Knowhow→Action→Review' },
+  ACHIEVE: { zh:'评估→头脑风暴→目标→选项→评估→计划→激励', en:'Assess→Creative→Hone→Initiate→Eval→Valid→Encourage' },
+  PRACTICE: { zh:'问题→目标→方案→后果→选定→实施→庆祝→评估', en:'Problem→Realistic→Alternative→Consequence→Target→Impl.→Celebrate→Eval.' },
+  FUEL: { zh:'框架→理解→探索→规划', en:'Frame→Understand→Explore→Lay out' },
+};
+
+/* ==============================================================
+   SYSTEM PROMPTS
+   ============================================================== */
+function empPrompt(scenario, diff, model, lang) {
+  const diffs = {
+    beginner:     { zh:'你是配合度较高的员工，态度开放，愿意回答问题。好问题能让你分享更多想法。', en:'You are a cooperative employee, open and willing to talk. Good questions make you share more.' },
+    intermediate: { zh:'你有些抗拒，需要感到被倾听才会打开心扉。对直接建议会消极应付。', en:'You are somewhat guarded and need to feel heard before opening up. Passive responses to direct advice.' },
+    advanced:     { zh:'你防御性强、情绪化、抗拒改变。只有建立真正信任后才会松开防线。对说教式对话会明显反感。', en:'You are highly defensive, emotional, resistant to change. Only open up when genuine trust is established. Visibly resent lecturing.' },
+  };
+  const d = diffs[diff][lang];
+  if (lang==='zh') return `你在扮演员工，正与你的经理/教练进行一对一对话。
+场景：${scenario}
+性格特征：${d}
+重要规则：
+1. 始终保持员工角色，不暴露自己是AI
+2. 不给用户任何教练提示或改进建议
+3. 根据对话质量动态调整：好提问→分享更多；给建议/评判→更防备
+4. 每次回复2-4句，像真实对话一样自然
+5. 全程使用中文
+正在练习：${model}模型`;
+  return `You are playing an employee in a one-on-one with your manager/coach.
+Scenario: ${scenario}
+Character: ${d}
+Rules:
+1. Always stay in character as the employee. Never reveal you are AI.
+2. Never give coaching tips or hints to the user.
+3. Adjust dynamically: good open questions → share more; advice-giving → become more guarded.
+4. 2-4 sentences per reply, natural conversational tone.
+5. Respond entirely in English.
+Practicing: ${model} model`;
+}
+
+function fbPrompt(model, scenario, lang) {
+  if (lang==='zh') return `你是ICF认证的资深教练评估专家，基于《建立可持续的教练文化》（Eng Hooi）框架进行评估。
+练习模型：${model}，场景：${scenario}
+评估维度（各20分）：
+1.倾听与观察：积极倾听，捕捉情绪，关注言语背后的深意
+2.提问质量：开放式、探索性强力问题
+3.遵循${model}模型步骤
+4.避免给答案/建议/评判
+5.建立心理安全对话空间
+严格按JSON格式输出，不含其他文字：
+{"lineReview":[{"message":"用户原话","rating":"good|warning|poor","comment":"点评（30字内）","suggestion":"替代说法或空字符串"}],"scores":{"listening":0,"questioning":0,"modelAdherence":0,"avoidingAdvice":0,"safeSpace":0},"highlights":["亮点1","亮点2","亮点3"],"improvements":["改进1","改进2"],"nextSteps":"下次建议（50字内）"}`;
+  return `You are a senior ICF-certified coaching evaluator based on "Building a Sustainable Coaching Culture" by Eng Hooi.
+Model: ${model}, Scenario: ${scenario}
+Dimensions (20pts each): Listening & Observation, Question Quality, ${model} Adherence, Avoiding Advice, Creating Safe Space.
+Output ONLY valid JSON:
+{"lineReview":[{"message":"exact user message","rating":"good|warning|poor","comment":"brief comment","suggestion":"alternative or empty string"}],"scores":{"listening":0,"questioning":0,"modelAdherence":0,"avoidingAdvice":0,"safeSpace":0},"highlights":["1","2","3"],"improvements":["1","2"],"nextSteps":"recommendation"}`;
+}
+
+function casePrompt(lang) {
+  const bookRef = `
+=== 本书章节索引 (Book Chapter Index) ===
+第一章 (p.10-30): 事实、挑战和教练文化趋势 — 教练vs指导的区别(p.15)、为什么教练是解决方案(p.16)、定义可持续教练文化(p.18)、好奇心作为教练核心心态(p.18)、授权原则(p.23)
+Chapter 1 (p.10-30): Facts, Challenges & Coaching Culture Trends — coaching vs mentoring, why coaching works, defining sustainable coaching culture, curiosity as core mindset (p.18), empowerment (p.23)
+
+第二章 (p.31-80): 创建卓越教练中心(CCOE) — 教练策略平台、教练路线图、教练模式、教练能力框架(p.55-62)、ICF核心能力(p.60)、EMCC能力框架(p.61-62)、教练认证之旅
+Chapter 2 (p.31-80): Creating Centre of Coaching Excellence — coaching strategy, roadmap, coaching models, competency frameworks (p.55-62), ICF core competencies (p.60), EMCC framework (p.61-62)
+
+第三章 (p.81-110): 获得董事会支持 — 文化第一技能第二、教练投资回报率、利益相关者管理、HR作为教练
+Chapter 3 (p.81-110): Gaining Board Support — culture first skills second, coaching ROI, stakeholder management, HR as coach
+
+第四章 (p.111-135): 线上技术加强教练文化 — 在线教练、反馈文化、远程入职、教练案例研究(p.133)、不给建议原则(p.133)
+Chapter 4 (p.111-135): Online Technology & Coaching — online coaching, feedback culture, case studies (p.133), no-advice principle (p.133)
+
+关键页面: p.18(好奇心/教练心态) p.23(授权) p.60(ICF核心能力/开放式提问/同理心/积极倾听) p.61-62(EMCC/行动导向) p.133(案例/不给建议) p.146(教练心态四核心)
+Key pages: p.18(curiosity/mindset) p.23(empowerment) p.60(ICF competencies/open questions/empathy/active listening) p.61-62(EMCC/action-oriented) p.133(case study/no-advice) p.146(four cores of coaching mindset)`;
+
+  if (lang==='zh') return `你是基于《建立可持续的教练文化》（Eng Hooi）的资深教练顾问。深入掌握ICF教练能力框架、GROW/CLEAR/OSKAR/ACHIEVE/PRACTICE/FUEL模型、提问而非指令原则、心理安全感建立技巧和常见教练陷阱。
+${bookRef}
+
+重要规则：你的所有建议必须来自以上书籍内容，不要编造。在"推荐阅读来源"中，必须引用具体的章节和页码。
+
+请用中文分析管理难题，严格按以下格式输出：
+## 问题诊断
+[核心问题分析，对应书中教练文化概念]
+## 推荐教练模型
+[最适合的模型及原因]
+## 推荐阅读来源
+[引用书中 2-3 个最相关的章节/页码，说明为什么这些内容能帮助用户更好地理解和解决问题。格式：📖 《建立可持续的教练文化》第X章 · 第X页 — 简述该章节的核心观点及如何对应用户的问题]
+## 建议开场问题（3-5个）
+[具体可用的开场教练问题，每行一个]
+## 注意事项
+[2-3个常见陷阱或需要特别注意的事项]`;
+  return `You are a senior coaching consultant based on "Building a Sustainable Coaching Culture" by Eng Hooi.
+Deep expertise: ICF competency framework, GROW/CLEAR/OSKAR/ACHIEVE/PRACTICE/FUEL models, asking vs. telling principle, psychological safety, coaching pitfalls.
+${bookRef}
+
+IMPORTANT: All advice must be grounded in the book above. Do NOT fabricate. In "Recommended Reading", cite specific chapters and pages.
+
+Respond in English using EXACTLY this format:
+## Problem Diagnosis
+[Core issue analysis, relevant coaching culture concept]
+## Recommended Coaching Model
+[Best-fit model and why]
+## Recommended Reading
+[Cite 2–3 most relevant chapters/pages from the book. Explain why each helps the user understand and solve their problem. Format: 📖 "Building a Sustainable Coaching Culture" Ch.X · p.XX — brief description of the key insight and how it relates to the user's case]
+## Suggested Opening Questions (3–5)
+[Specific usable opening coaching questions, one per line]
+## Pitfalls & Warnings
+[2–3 common traps or key watch-outs]`;
+}
+
+/* ==============================================================
+   API
+   ============================================================== */
+/* ── Proxy helper ─────────────────────────────────────────────────────────
+   When running via the local server (localhost / 127.0.0.1), all API calls
+   are routed through /proxy (same-origin) to avoid CORS restrictions.
+   When opened directly as a file:// URL the old direct-fetch path is used
+   (may fail in some browsers due to CORS).
+   ──────────────────────────────────────────────────────────────────────── */
+const USE_PROXY = ['localhost','127.0.0.1'].includes(location.hostname);
+
+async function proxyFetch(url, headers, body) {
+  if (USE_PROXY) {
+    let r;
+    try {
+      r = await fetch('/proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, headers, body }),
+      });
+    } catch (netErr) {
+      throw new Error(
+        S.lang === 'zh'
+          ? '无法连接到本地代理服务器。请确认：① 终端窗口是否还在运行 ② 使用「启动平台 Start Server.command」启动'
+          : 'Cannot reach local proxy. Ensure the terminal window is still running and you launched via Start Server.command'
+      );
+    }
+    if (!r.ok) {
+      let detail = '';
+      try { detail = await r.text(); } catch {}
+      throw new Error(`API ${r.status}: ${detail}`);
+    }
+    return r.json();
+  } else {
+    // Direct fetch fallback (may be blocked by CORS on some browsers)
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...headers },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}: ${await r.text()}`);
+    return r.json();
+  }
+}
+
+async function callAPI(messages, sysPrompt) {
+  switch (S.provider) {
+    case 'anthropic':   return callAnthropic(messages, sysPrompt);
+    case 'openai':      return callOpenAI(messages, sysPrompt);
+    case 'google':      return callGoogle(messages, sysPrompt);
+    case 'openrouter':  return callOpenRouter(messages, sysPrompt);
+    default:            return callAnthropic(messages, sysPrompt);
+  }
+}
+
+async function callAnthropic(messages, sys) {
+  const data = await proxyFetch(
+    'https://api.anthropic.com/v1/messages',
+    {
+      'x-api-key': S.apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    { model: S.selectedModel, max_tokens: 1024, system: sys, messages },
+  );
+  if (data.error) throw new Error(`Anthropic: ${data.error.message || JSON.stringify(data.error)}`);
+  return data.content[0].text;
+}
+
+async function callOpenAI(messages, sys) {
+  const data = await proxyFetch(
+    'https://api.openai.com/v1/chat/completions',
+    { 'Authorization': `Bearer ${S.apiKey}` },
+    { model: S.selectedModel, max_tokens: 1024, messages: [{ role:'system', content: sys }, ...messages] },
+  );
+  if (data.error) throw new Error(`OpenAI: ${data.error.message || JSON.stringify(data.error)}`);
+  return data.choices[0].message.content;
+}
+
+async function callGoogle(messages, sys) {
+  const contents = messages.map(m => ({
+    role: m.role === 'user' ? 'user' : 'model',
+    parts: [{ text: m.content }],
+  }));
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${S.selectedModel}:generateContent?key=${S.apiKey}`;
+  const data = await proxyFetch(
+    url, {},
+    { contents, systemInstruction: { parts: [{ text: sys }] }, generationConfig: { maxOutputTokens: 1024 } },
+  );
+  if (data.error) throw new Error(`Google: ${data.error.message || JSON.stringify(data.error)}`);
+  return data.candidates[0].content.parts[0].text;
+}
+
+async function callOpenRouter(messages, sys) {
+  const data = await proxyFetch(
+    'https://openrouter.ai/api/v1/chat/completions',
+    {
+      'Authorization': `Bearer ${S.apiKey}`,
+      'HTTP-Referer': 'https://coachingcultureinternational.com',
+      'X-Title': 'AI Coaching Practice Platform',
+    },
+    { model: S.selectedModel, max_tokens: 1024, messages: [{ role:'system', content: sys }, ...messages] },
+  );
+  if (data.error) throw new Error(`OpenRouter: ${data.error.message || JSON.stringify(data.error)}`);
+  return data.choices[0].message.content;
+}
+
+/* ==============================================================
+   RENDER
+   ============================================================== */
+function render() {
+  const app = document.getElementById('app');
+  switch (S.view) {
+    case 'home':     app.innerHTML = vHome(); break;
+    case 'setup':    app.innerHTML = vSetup(); break;
+    case 'chat':     app.innerHTML = vChat(); break;
+    case 'feedback': app.innerHTML = vFeedback(); break;
+    case 'case':     app.innerHTML = vCase(); break;
+  }
+  attachHandlers();
+  if (S.view === 'chat') scrollChat();
+}
+
+/* ---- HOME ---- */
+function vHome() {
+  const prov = S.provider;
+  const provInfo = PROVIDERS[prov];
+  const hasKey = S.apiKey.length > 8;
+  const models = provInfo.models;
+  const isOR = prov === 'openrouter';
+
+  return `
+<header class="app-header">
+  <div class="logo-wrap">
+    <div class="logo-emblem">CCI</div>
+    <div class="logo-text">
+      <div class="l1">${t('l1')}</div>
+      <div class="l2">${t('l2')}</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button>
+  </div>
+</header>
+
+<div class="main">
+  <!-- HERO -->
+  <div class="home-hero">
+    <div class="home-hero-inner">
+      <div class="hero-badge">🏆 ${t('heroBadge')}</div>
+      <h1>${t('heroTitle').split('\n').map((l,i)=> i===1?`<span>${l}</span>`:l).join('<br>')}</h1>
+      <p>${t('heroDesc')}</p>
+      <div class="hero-stats">
+        ${[['1','detail-models'],['2','detail-diff'],['3','detail-scen'],['4','detail-dim']].map(([n,id])=>`
+        <div class="hero-stat clickable" onclick="scrollToDetail('${id}')">
+          <div class="num">${t(`stat${n}n`)}</div>
+          <div class="label">${t(`stat${n}l`)}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- API CONFIG -->
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-title" style="margin-bottom:14px">🔑 ${S.lang==='zh'?'选择 AI 提供商 & 配置 API Key':'Select AI Provider & Configure API Key'}</div>
+
+    <!-- Provider selector -->
+    <div class="provider-grid">
+      ${Object.entries(PROVIDERS).map(([k,p])=>`
+      <div class="provider-card ${S.provider===k?`sel-${k}`:''}` +
+        `" onclick="selectProvider('${k}')" style="${S.provider===k?`border-color:${p.color};`:''}">
+        <div class="provider-icon">${p.icon}</div>
+        <div class="provider-name">${p.name}</div>
+        <div class="provider-dot" style="${S.provider===k?`background:${p.color}`:''}" ></div>
+      </div>`).join('')}
+    </div>
+
+    <!-- API Guide for selected provider -->
+    ${provInfo.guide ? (() => {
+      const g = provInfo.guide[S.lang] || provInfo.guide.en;
+      return `
+    <div class="api-guide" id="apiGuide">
+      <div class="api-guide-header" onclick="document.getElementById('apiGuide').classList.toggle('open')">
+        <div class="api-guide-title">📘 ${S.lang==='zh'?`如何获取 ${provInfo.name} API Key`:`How to get ${provInfo.name} API Key`}</div>
+        <button class="api-guide-toggle">${S.lang==='zh'?'展开说明 ▾':'Show steps ▾'}</button>
+      </div>
+      <div class="api-guide-body">
+        <ol class="api-guide-steps">
+          ${g.steps.map(s=>`<li>${esc(s)}</li>`).join('')}
+        </ol>
+        <div class="api-guide-footer">
+          <span class="api-guide-pricing">💰 ${esc(g.pricing)}</span>
+          <a class="api-guide-link" href="${g.url}" target="_blank" rel="noopener">${esc(g.urlLabel)}</a>
+        </div>
+      </div>
+    </div>`;
+    })() : ''}
+
+    <!-- Key input -->
+    <div class="security-notice">🔒 ${t('apiSec')}</div>
+    <div class="form-group">
+      <label class="form-label">${provInfo.name} ${t('apiLabel')}</label>
+      <input type="password" class="form-input" id="apiKeyInput"
+        placeholder="${t('apiPh', prov)}"
+        value="${esc(S.apiKey)}"
+        oninput="handleKey(this.value)" />
+    </div>
+
+    <!-- Model select -->
+    <div class="form-group" style="margin-bottom:${isOR?'10px':'0'}">
+      <label class="form-label">${t('modelLabel')}</label>
+      <select class="form-input" id="modelSel" onchange="handleModel(this.value)">
+        ${models.map(m=>`<option value="${m.id}" ${S.selectedModel===m.id?'selected':''}>${m.label}</option>`).join('')}
+        ${isOR?`<option value="__custom__" ${!models.find(m=>m.id===S.selectedModel)?'selected':''}>✏️ ${S.lang==='zh'?'自定义模型 ID':'Custom Model ID'}</option>`:''}
+      </select>
+    </div>
+    ${isOR && (!models.find(m=>m.id===S.selectedModel) || S.selectedModel==='__custom__') ? `
+    <div class="form-group" style="margin-bottom:0">
+      <label class="form-label">${t('customModelLabel')}</label>
+      <input class="form-input" id="customModelIn"
+        placeholder="${t('customModelPh')}"
+        value="${esc(!models.find(m=>m.id===S.selectedModel) ? S.selectedModel : '')}"
+        oninput="handleCustomModel(this.value)" />
+    </div>` : ''}
+  </div>
+
+  <!-- MODES -->
+  <div class="mode-cards">
+    <div class="mode-card ${!hasKey?'disabled':''}" onclick="startMode('roleplay')">
+      <div class="mode-icon">🎭</div>
+      <div class="mode-title">${t('mode1')}</div>
+      <div class="mode-desc">${t('mode1d')}</div>
+      <div class="mode-cta">${t('mode1cta')}</div>
+    </div>
+    <div class="mode-card ${!hasKey?'disabled':''}" onclick="startMode('case')">
+      <div class="mode-icon">🔍</div>
+      <div class="mode-title">${t('mode2')}</div>
+      <div class="mode-desc">${t('mode2d')}</div>
+      <div class="mode-cta">${t('mode2cta')}</div>
+    </div>
+  </div>
+  ${!hasKey?`<div style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:-10px">⬆️ ${t('apiKeyMissing')}</div>`:''}
+
+  <!-- DETAIL SECTION -->
+  <div class="detail-section" id="detail-section">
+    <div class="detail-section-title">📖 ${t('detailTitle')}</div>
+    <div class="detail-cards">
+
+      <!-- 6 Coaching Models -->
+      <div class="detail-card" id="detail-models">
+        <div class="detail-card-header">
+          <div class="detail-card-icon">🧭</div>
+          <div class="detail-card-title">${t('detailModelsTitle')}</div>
+        </div>
+        <div class="detail-card-desc">${t('detailModelsDesc')}</div>
+        <div class="detail-items">
+          ${Object.entries(MODELS).map(([k,v])=>{
+            const desc = MODEL_DESC[k]?.[S.lang] || '';
+            return `<div class="detail-item">
+              <div class="detail-item-name">${k}</div>
+              <div class="detail-item-sub">${desc}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- 3 Difficulty Levels -->
+      <div class="detail-card" id="detail-diff">
+        <div class="detail-card-header">
+          <div class="detail-card-icon">📊</div>
+          <div class="detail-card-title">${t('detailDiffTitle')}</div>
+        </div>
+        <div class="detail-card-desc">${t('detailDiffDesc')}</div>
+        <div class="detail-items">
+          ${[['🟢',t('d1t'),t('d1d')],['🟡',t('d2t'),t('d2d')],['🔴',t('d3t'),t('d3d')]].map(([ic,nm,ds])=>`
+          <div class="detail-item">
+            <div class="detail-item-name">${ic} ${nm}</div>
+            <div class="detail-item-sub">${ds}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- 6+ Scenarios -->
+      <div class="detail-card" id="detail-scen">
+        <div class="detail-card-header">
+          <div class="detail-card-icon">🎯</div>
+          <div class="detail-card-title">${t('detailScenTitle')}</div>
+        </div>
+        <div class="detail-card-desc">${t('detailScenDesc')}</div>
+        <div class="detail-items">
+          ${t('scenarios').map((s,i)=>`
+          <div class="detail-item">
+            <div class="detail-item-name">${S.lang==='zh'?'场景':'Scenario'} ${i+1}</div>
+            <div class="detail-item-sub">${esc(s)}</div>
+          </div>`).join('')}
+          <div class="detail-item" style="border:1px dashed var(--border);background:transparent">
+            <div class="detail-item-name">✏️ ${S.lang==='zh'?'自定义场景':'Custom Scenario'}</div>
+            <div class="detail-item-sub">${S.lang==='zh'?'输入任意场景描述，贴合您的真实工作情境':'Enter any scenario to match your real work context'}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Score Dimensions -->
+      <div class="detail-card" id="detail-dim">
+        <div class="detail-card-header">
+          <div class="detail-card-icon">⭐</div>
+          <div class="detail-card-title">${t('detailDimTitle')}</div>
+        </div>
+        <div class="detail-card-desc">${t('detailDimDesc')}</div>
+        <div class="detail-items">
+          ${[t('s1'),t('s2'),t('s3'),t('s4'),t('s5')].map((d,i)=>`
+          <div class="detail-item">
+            <div class="detail-item-name">${i+1}. ${d}</div>
+            <div class="detail-item-sub">1-10 ${S.lang==='zh'?'分':'pts'}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>`;
+}
+
+/* ---- SETUP ---- */
+function vSetup() {
+  const scens = t('scenarios');
+  const isCustom = S.scenario === 'custom';
+  return `
+<header class="app-header">
+  <div class="logo-wrap">
+    <div class="logo-emblem">CCI</div>
+    <div class="logo-text"><div class="l1">${t('l1')}</div><div class="l2">${t('l2')}</div></div>
+  </div>
+  <div class="header-right">
+    <button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button>
+  </div>
+</header>
+<div class="main">
+  <div class="breadcrumb">
+    <span class="bc-link" onclick="set({view:'home'})">${t('back')}</span>
+    <span>›</span><span>${t('mode1')}</span>
+  </div>
+
+  <div class="setup-grid" style="margin-bottom:20px">
+    <!-- Difficulty -->
+    <div class="card">
+      <div class="card-title">${t('diff')}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        ${[['beginner','🟢','d1t','d1d'],['intermediate','🟡','d2t','d2d'],['advanced','🔴','d3t','d3d']].map(([v,ic,tk,dk])=>`
+        <button class="opt-btn ${S.difficulty===v?'selected':''}" onclick="set({difficulty:'${v}'})">
+          <span class="oi">${ic}</span>
+          <div><div class="ot">${t(tk)}</div><div class="od">${t(dk)}</div></div>
+        </button>`).join('')}
+      </div>
+    </div>
+
+    <!-- Model -->
+    <div class="card">
+      <div class="card-title">${t('modelSel')}</div>
+      <div class="opt-grid" style="margin-top:4px">
+        ${Object.keys(MODELS).map(k=>`
+        <button class="opt-btn ${S.coachModel===k?'selected':''}" onclick="set({coachModel:'${k}'})">
+          <div>
+            <div class="model-tag">${k}</div>
+            <div class="od" style="font-size:11px;margin-top:3px">${MODEL_DESC[k][S.lang]}</div>
+          </div>
+        </button>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario -->
+  <div class="card">
+    <div class="card-title">${t('scenSel')}</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      ${scens.map((s,i)=>`
+      <div class="scenario-item ${S.scenario===i?'selected':''}" onclick="set({scenario:${i}})">
+        <span class="scenario-num">${i+1}</span>${esc(s)}
+      </div>`).join('')}
+      <div class="scenario-item ${isCustom?'selected':''}" onclick="set({scenario:'custom'})">
+        <span class="scenario-num">✏</span>${t('scenCustom')}
+      </div>
+    </div>
+    ${isCustom?`
+    <div class="form-group" style="margin-top:14px;margin-bottom:0">
+      <label class="form-label">${t('customLbl')}</label>
+      <textarea class="form-input form-textarea" id="customScIn" placeholder="${t('customPh')}">${esc(S.customScenarioText||'')}</textarea>
+    </div>`:''}
+  </div>
+
+  <div style="margin-top:22px;text-align:center">
+    <button class="btn btn-gold btn-lg" onclick="startChat()">${t('startBtn')}</button>
+  </div>
+</div>`;
+}
+
+/* ---- CHAT ---- */
+function vChat() {
+  const steps = MODELS[S.coachModel]?.steps?.[S.lang] || [];
+  const sc = S.activeScenario;
+  const diffLabel = [t('d1t'),t('d2t'),t('d3t')][['beginner','intermediate','advanced'].indexOf(S.difficulty)];
+  return `
+<header class="app-header">
+  <div class="logo-wrap">
+    <div class="logo-emblem">CCI</div>
+    <div class="logo-text"><div class="l1">${t('l1')}</div></div>
+  </div>
+  <div class="header-right">
+    <span class="turn-pill">${t('turnLbl', S.turnCount)}</span>
+    <button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button>
+  </div>
+</header>
+<div class="chat-page">
+  <div class="chat-layout">
+    <div class="chat-panel">
+      <div class="chat-bar">
+        <div class="chat-bar-info">
+          <strong>🎭 ${t('mode1')} · ${S.coachModel}</strong>
+          <div class="chat-bar-meta">${diffLabel} · ${esc(sc.substring(0,50))}${sc.length>50?'…':''}</div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="endSession()">${t('endBtn')}</button>
+      </div>
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="sys-msg">— ${t('sysStart')} —</div>
+        ${S.messages.map(m=>msgHTML(m)).join('')}
+        ${S.isLoading?`
+        <div class="msg ai">
+          <div class="msg-lbl">${t('aiLbl')}</div>
+          <div class="typing-bbl"><div class="dots"><span></span><span></span><span></span></div></div>
+        </div>`:''}
+      </div>
+      <div class="chat-input-row">
+        <textarea class="chat-in" id="chatIn" placeholder="${t('inputPh')}"
+          ${S.isLoading?'disabled':''} rows="2"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+        <button class="send-btn" onclick="sendMsg()" ${S.isLoading?'disabled':''}>➤</button>
+      </div>
+      ${S.error?`<div class="error-box" style="margin:0 14px 12px">⚠️ ${esc(S.error)}</div>`:''}
+    </div>
+
+    <div class="guide-panel">
+      <div class="guide-card">
+        <div class="guide-h">📋 ${t('modelGuide')}: <span style="color:var(--gold)">${S.coachModel}</span></div>
+        ${steps.map(s=>`
+        <div class="step-row">
+          <div class="step-letter">${s.l}</div>
+          <div>
+            <div class="step-name">${s.n}</div>
+            <div class="step-desc">${s.d}</div>
+            <div class="step-q">${s.q}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div class="tips-card">
+        <div class="guide-h" style="border-color:var(--gold-light);margin-bottom:10px">💡 ${t('tips')} <span style="font-size:10px;font-weight:400;color:var(--text-muted);margin-left:4px">${S.lang==='zh'?'(点击查看详解)':'(click for detail)'}</span></div>
+        ${(TIP_DATA[S.lang]||TIP_DATA.zh).map((tip,i)=>`
+        <div class="tip-row" onclick="showTip(${i})">
+          <span style="color:var(--gold);font-size:13px">${tip.icon}</span>
+          <span style="flex:1">${tip.title}</span>
+          <span class="tip-arrow">›</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>`;
+}
+
+function msgHTML(m) {
+  const isUser = m.role==='user';
+  return `
+<div class="msg ${isUser?'user':'ai'}">
+  <div class="msg-lbl">${isUser?t('youLbl'):t('aiLbl')}</div>
+  <div class="msg-bbl">${esc(m.content)}</div>
+</div>`;
+}
+
+/* ---- FEEDBACK ---- */
+function vFeedback() {
+  if (S.feedbackLoading) return `
+<header class="app-header">
+  <div class="logo-wrap"><div class="logo-emblem">CCI</div><div class="logo-text"><div class="l1">${t('l1')}</div></div></div>
+  <div class="header-right"><button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button></div>
+</header>
+<div class="main"><div class="loading-wrap">
+  <div class="spin" style="display:block;margin:0 auto 16px"></div>
+  <div style="font-size:14px;color:var(--text-light)">${t('fbLoading')}</div>
+</div></div>`;
+
+  const fb = S.feedback;
+  if (!fb) return `
+<header class="app-header">
+  <div class="logo-wrap"><div class="logo-emblem">CCI</div><div class="logo-text"><div class="l1">${t('l1')}</div></div></div>
+  <div class="header-right"><button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button></div>
+</header>
+<div class="main">
+  ${S.error?`<div class="error-box" style="margin-bottom:20px">⚠️ ${esc(S.error)}</div>`:''}
+  <div style="text-align:center;padding:40px">
+    <div style="font-size:48px;margin-bottom:16px">😞</div>
+    <p style="font-size:14px;color:var(--text-light);margin-bottom:20px">${S.lang==='zh'?'无法生成反馈报告':'Could not generate feedback report'}</p>
+    <button class="btn btn-gold" onclick="resetHome()">${t('backHome')}</button>
+  </div>
+</div>`;
+  const sc = fb.scores||{};
+  const total = (sc.listening||0)+(sc.questioning||0)+(sc.modelAdherence||0)+(sc.avoidingAdvice||0)+(sc.safeSpace||0);
+  const tColor = total>=80?'var(--success)':total>=60?'var(--warning)':'var(--danger)';
+  const sRows = [
+    ['listening',t('s1')],['questioning',t('s2')],
+    ['modelAdherence',t('s3')],['avoidingAdvice',t('s4')],['safeSpace',t('s5')],
+  ];
+  return `
+<header class="app-header">
+  <div class="logo-wrap"><div class="logo-emblem">CCI</div><div class="logo-text"><div class="l1">${t('l1')}</div></div></div>
+  <div class="header-right"><button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button></div>
+</header>
+<div class="main">
+  <div class="breadcrumb">
+    <span class="bc-link" onclick="resetHome()">${t('backHome')}</span>
+    <span>›</span><span>${t('fbTitle')}</span>
+  </div>
+  ${S.feedbackLang && S.feedbackLang !== S.lang ? `
+  <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:var(--r);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <span style="font-size:13px;color:var(--navy)">${S.lang==='zh'?'反馈报告为英文，点击重新生成中文版':'Feedback is in Chinese. Click to regenerate in English.'}</span>
+    <button class="btn btn-gold btn-sm" onclick="regenerateFeedback()">${S.lang==='zh'?'重新生成':'Regenerate'}</button>
+  </div>` : ''}
+  <div class="fb-layout">
+    <div>
+      <div class="card">
+        <div class="card-title">${t('lineTitle')}</div>
+        <div class="card-sub">${S.coachModel} · ${esc(S.activeScenario.substring(0,40))}</div>
+        ${(fb.lineReview||[]).map(item=>`
+        <div class="rev-item ${item.rating||'warning'}">
+          <div class="rev-badge ${item.rating||'warning'}">${item.rating==='good'?t('gLbl'):item.rating==='poor'?t('pLbl'):t('wLbl')}</div>
+          <div class="rev-msg">"${esc(item.message)}"</div>
+          <div class="rev-comment">${esc(item.comment)}</div>
+          ${item.suggestion?`<div class="rev-suggest">${t('sugPfx')}${esc(item.suggestion)}</div>`:''}
+        </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="score-wrap" style="margin-bottom:16px">
+        <div class="score-hero" style="background:linear-gradient(135deg,${tColor} 0%,${tColor} 100%)">
+          <div class="score-num">${total}<span class="score-denom">/100</span></div>
+          <div class="score-lbl">${t('totalLbl')}</div>
+        </div>
+        <div class="sec-title" style="margin-top:4px">${t('scoreTitle')}</div>
+        ${sRows.map(([k,lbl])=>{
+          const v=sc[k]||0;
+          const c=v>=16?'var(--success)':v>=12?'var(--warning)':'var(--danger)';
+          return `
+        <div class="score-row">
+          <div class="score-row-lbl">${lbl}</div>
+          <div class="score-bar-bg"><div class="score-bar" style="width:${v*5}%;background:${c}"></div></div>
+          <div class="score-row-n" style="color:${c}">${v}/20</div>
+        </div>`;
+        }).join('')}
+      </div>
+      <div class="score-wrap" style="margin-bottom:16px">
+        <div class="sec-title">${t('hlTitle')}</div>
+        ${(fb.highlights||[]).map(h=>`<div class="hl-item"><span class="hl-dot">★</span>${esc(h)}</div>`).join('')}
+        <div class="divider"></div>
+        <div class="sec-title">${t('impTitle')}</div>
+        ${(fb.improvements||[]).map(h=>`<div class="hl-item"><span class="hl-dot" style="color:var(--warning)">▶</span>${esc(h)}</div>`).join('')}
+        <div class="divider"></div>
+        <div class="sec-title">${t('nextTitle')}</div>
+        <p style="font-size:13px;color:var(--text-light);line-height:1.6">${esc(fb.nextSteps||'')}</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn btn-gold btn-full" onclick="set({view:'setup',messages:[],userMessages:[],turnCount:0,feedback:null,error:''})">${t('again')}</button>
+        <button class="btn btn-ghost btn-full" onclick="resetHome()">${t('backHome')}</button>
+      </div>
+    </div>
+  </div>
+</div>`;
+}
+
+/* ---- CASE ---- */
+function vCase() {
+  const profiles = loadProfiles();
+  const curProfile = S.profileId ? getProfile(S.profileId) : null;
+  const zh = S.lang === 'zh';
+
+  // Profile form HTML
+  const profileFormHTML = S.showProfileForm ? (() => {
+    const ep = S.editingProfileId ? getProfile(S.editingProfileId) : null;
+    return `
+    <div class="profile-form">
+      <div class="profile-form-title">${ep ? (zh?'编辑档案':'Edit Profile') : (zh?'新建员工 / 案例档案':'New Employee / Case Profile')}</div>
+      <div class="profile-form-row">
+        <div class="form-group">
+          <label class="form-label">${zh?'姓名 *':'Name *'}</label>
+          <input class="form-input" id="pfName" placeholder="${zh?'员工姓名':'Employee name'}" value="${esc(ep?.name||'')}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">${zh?'职位':'Role'}</label>
+          <input class="form-input" id="pfRole" placeholder="${zh?'如：项目经理':'e.g. Project Manager'}" value="${esc(ep?.role||'')}" />
+        </div>
+      </div>
+      <div class="profile-form-row">
+        <div class="form-group">
+          <label class="form-label">${zh?'部门':'Department'}</label>
+          <input class="form-input" id="pfDept" placeholder="${zh?'如：市场部':'e.g. Marketing'}" value="${esc(ep?.dept||'')}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">${zh?'性格特点':'Personality'}</label>
+          <input class="form-input" id="pfPersonality" placeholder="${zh?'如：内向、追求完美':'e.g. introverted, perfectionist'}" value="${esc(ep?.personality||'')}" />
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">${zh?'备注（背景、已知情况等）':'Notes (background, context, etc.)'}</label>
+        <textarea class="form-input form-textarea" id="pfNotes" rows="2" placeholder="${zh?'任何你想让AI记住的背景信息':'Any background info for the AI to remember'}">${esc(ep?.notes||'')}</textarea>
+      </div>
+      <div class="profile-form-actions">
+        <button class="btn btn-ghost btn-sm" onclick="set({showProfileForm:false,editingProfileId:null})">${zh?'取消':'Cancel'}</button>
+        ${ep ? `<button class="btn btn-danger btn-sm" onclick="if(confirm('${zh?'确认删除此档案？':'Delete this profile?'}')){deleteProfile('${ep.id}');set({showProfileForm:false,editingProfileId:null,profileId:null})}">${zh?'删除':'Delete'}</button>` : ''}
+        <button class="btn btn-primary btn-sm" onclick="saveProfileForm('${ep?.id||''}')">${ep ? (zh?'保存':'Save') : (zh?'创建':'Create')}</button>
+      </div>
+    </div>`;
+  })() : '';
+
+  // History section for selected profile
+  const historyHTML = curProfile && curProfile.history && curProfile.history.length > 0 ? `
+    <div class="history-list">
+      <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px">📋 ${zh?'历史记录':'History'} (${curProfile.history.length})</div>
+      ${curProfile.history.slice(0,10).map((h,i) => {
+        const isExp = expandedHistory.has(i);
+        return `
+      <div class="history-item${isExp?' expanded':''}" onclick="toggleHistory(${i})">
+        <div class="history-header">
+          <div style="flex:1;min-width:0">
+            <div class="history-date">${new Date(h.date).toLocaleDateString(zh?'zh-CN':'en-US',{year:'numeric',month:'short',day:'numeric'})}</div>
+            <div class="history-situ">${isExp ? esc(h.situ||'') : (esc((h.situ||'').substring(0,80)) + ((h.situ||'').length>80?'…':''))}</div>
+          </div>
+          <span class="history-arrow">▶</span>
+        </div>
+        ${!isExp && h.summary ? `<div class="history-summary">${esc(h.summary.substring(0,150))}${h.summary.length>150?'…':''}</div>` : ''}
+        ${isExp ? `<div class="history-detail">
+          <div class="history-detail-label">${zh?'情境描述':'Situation'}</div>
+          <div class="history-detail-text">${esc(h.situ||'-')}</div>
+          <div class="history-detail-label">${zh?'已尝试的方法':'What Was Tried'}</div>
+          <div class="history-detail-text">${esc(h.tried||'-')}</div>
+          <div class="history-detail-label">${zh?'期望目标':'Goal'}</div>
+          <div class="history-detail-text">${esc(h.goal||'-')}</div>
+          ${h.summary ? `<div class="history-detail-label">${zh?'AI 分析摘要':'AI Analysis Summary'}</div>
+          <div class="history-detail-text">${esc(h.summary)}</div>` : ''}
+        </div>` : ''}
+      </div>`;
+      }).join('')}
+      ${curProfile.history.length > 10 ? `<div style="font-size:11px;color:var(--text-muted);text-align:center;padding:4px">${zh?`还有 ${curProfile.history.length-10} 条记录`:`${curProfile.history.length-10} more entries`}</div>` : ''}
+    </div>` : '';
+
+  return `
+<header class="app-header">
+  <div class="logo-wrap"><div class="logo-emblem">CCI</div><div class="logo-text"><div class="l1">${t('l1')}</div></div></div>
+  <div class="header-right"><button class="lang-btn" onclick="set({lang:S.lang==='zh'?'en':'zh'})">${t('langBtn')}</button></div>
+</header>
+<div class="main">
+  <div class="breadcrumb">
+    <span class="bc-link" onclick="set({view:'home',caseOutput:null,error:''})">${t('back')}</span>
+    <span>›</span><span>${t('caseTitle')}</span>
+  </div>
+
+  <!-- PROFILE SELECTOR -->
+  <div class="profile-section">
+    <div class="profile-bar ${curProfile?'has-profile':''}">
+      <div class="profile-bar-icon">${curProfile ? '👤' : '📁'}</div>
+      <div class="profile-bar-info">
+        ${curProfile
+          ? `<div class="profile-bar-name">${esc(curProfile.name)}${curProfile.role?' · '+esc(curProfile.role):''}</div>
+             <div class="profile-bar-meta">${curProfile.dept?esc(curProfile.dept)+' · ':''}${zh?'历史记录':'History'}: ${(curProfile.history||[]).length} ${zh?'条':'entries'}${curProfile.personality?' · '+esc(curProfile.personality):''}</div>`
+          : `<div class="profile-bar-name">${zh?'未选择员工档案':'No profile selected'}</div>
+             <div class="profile-bar-meta">${zh?'选择或创建档案，AI将记住该员工的历史案例':'Select or create a profile for AI to remember past cases'}</div>`}
+      </div>
+      <div class="profile-bar-actions">
+        ${profiles.length > 0 ? `
+        <select class="profile-select" onchange="selectProfile(this.value)">
+          <option value="">${zh?'-- 选择档案 --':'-- Select --'}</option>
+          ${profiles.map(p => `<option value="${p.id}" ${S.profileId===p.id?'selected':''}>${esc(p.name)}${p.role?' ('+esc(p.role)+')':''}</option>`).join('')}
+        </select>` : ''}
+        ${curProfile ? `<button class="btn btn-ghost btn-sm" onclick="set({showProfileForm:true,editingProfileId:'${curProfile.id}'})">✏️</button>` : ''}
+        <button class="btn btn-primary btn-sm" onclick="set({showProfileForm:true,editingProfileId:null})">${zh?'+ 新建':'+ New'}</button>
+      </div>
+    </div>
+    ${profileFormHTML}
+    ${!S.showProfileForm ? historyHTML : ''}
+  </div>
+
+  <div class="case-layout">
+    <div class="card">
+      <div class="card-title">${t('caseTitle')}</div>
+      <div class="card-sub">${t('caseSub')}</div>
+      ${S.error?`<div class="error-box">⚠️ ${esc(S.error)}</div>`:''}
+      <div class="form-group">
+        <label class="form-label">${t('c1')}</label>
+        <textarea class="form-input form-textarea" id="cSitu" placeholder="${t('c1p')}">${esc(S.caseSitu||'')}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">${t('c2')}</label>
+        <textarea class="form-input form-textarea" id="cTried" placeholder="${t('c2p')}">${esc(S.caseTried||'')}</textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">${t('c3')}</label>
+        <textarea class="form-input form-textarea" id="cGoal" placeholder="${t('c3p')}">${esc(S.caseGoal||'')}</textarea>
+      </div>
+      <div style="margin-top:18px">
+        <button class="btn btn-gold btn-full" onclick="submitCase()" ${S.caseLoading?'disabled':''}>
+          ${S.caseLoading?`<span class="spin" style="width:16px;height:16px;border-width:2px;display:inline-block"></span> ${t('analyzing')}`:t('analyzeBtn')}
+        </button>
+      </div>
+    </div>
+    <div>
+      ${S.caseOutput && S.caseOutputLang && S.caseOutputLang !== S.lang ? `
+      <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <span style="font-size:13px;color:var(--navy)">${S.lang==='zh'?'分析结果为英文，点击重新生成中文版':'Analysis is in Chinese. Click to regenerate in English.'}</span>
+        <button class="btn btn-gold btn-sm" onclick="resubmitCase()" ${S.caseLoading?'disabled':''}>${S.lang==='zh'?'重新生成':'Regenerate'}</button>
+      </div>` : ''}
+      ${S.caseOutput ? parseCaseOutput(S.caseOutput) : `
+      <div class="card" style="text-align:center;padding:60px;color:var(--text-muted)">
+        <div style="font-size:48px;margin-bottom:16px">🔍</div>
+        <div style="font-size:14px">${t('caseSub')}</div>
+      </div>`}
+    </div>
+  </div>
+</div>`;
+}
+
+function parseCaseOutput(text) {
+  const raw = text.replace(/^## /m, '\n## ').split(/\n## /).filter(Boolean);
+  return `<div class="card">` + raw.map(sec => {
+    const nl = sec.indexOf('\n');
+    const title = nl>0 ? sec.substring(0,nl).trim() : sec.trim();
+    const body = nl>0 ? sec.substring(nl+1).trim() : '';
+    const lines = body.split('\n').filter(l=>l.trim()).map(line => {
+      const clean = line.replace(/^[\d\.\-\*\s]+/, '').trim();
+      if (!clean) return '';
+      if (/[？"""]/.test(clean) || /^(What|How|Where|When|Why|If|Tell|Can|在|你|什么|怎么|如果|请)/i.test(clean)) {
+        return `<div class="q-chip">${esc(clean)}</div>`;
+      }
+      return `<p style="font-size:13px;color:var(--text-light);margin-bottom:6px;line-height:1.6">• ${esc(clean)}</p>`;
+    }).join('');
+    return `<div class="case-block"><h4>${esc(title)}</h4><div style="margin-top:4px">${lines}</div></div>`;
+  }).join('') + `</div>`;
+}
+
+/* ==============================================================
+   HANDLERS
+   ============================================================== */
+function attachHandlers() {
+  document.querySelectorAll('textarea').forEach(el => {
+    el.addEventListener('input', () => { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,160)+'px'; });
+  });
+}
+
+/* ---- PROFILE HANDLERS ---- */
+function selectProfile(id) {
+  S.profileId = id || null;
+  S.showProfileForm = false;
+  S.editingProfileId = null;
+  expandedHistory.clear();
+  render();
+}
+
+function saveProfileForm(existingId) {
+  const name = (document.getElementById('pfName')?.value || '').trim();
+  if (!name) { alert(S.lang==='zh'?'请输入姓名':'Name is required'); return; }
+  const data = {
+    name,
+    role: (document.getElementById('pfRole')?.value || '').trim(),
+    dept: (document.getElementById('pfDept')?.value || '').trim(),
+    personality: (document.getElementById('pfPersonality')?.value || '').trim(),
+    notes: (document.getElementById('pfNotes')?.value || '').trim(),
+  };
+  if (existingId) {
+    updateProfile(existingId, data);
+    set({ showProfileForm: false, editingProfileId: null });
+  } else {
+    const p = createProfile(data);
+    set({ profileId: p.id, showProfileForm: false, editingProfileId: null });
+  }
+}
+
+function buildProfileContext() {
+  const p = S.profileId ? getProfile(S.profileId) : null;
+  if (!p) return '';
+  const zh = S.lang === 'zh';
+  let ctx = zh
+    ? `\n\n=== 员工档案 ===\n姓名：${p.name}`
+    : `\n\n=== Employee Profile ===\nName: ${p.name}`;
+  if (p.role) ctx += zh ? `\n职位：${p.role}` : `\nRole: ${p.role}`;
+  if (p.dept) ctx += zh ? `\n部门：${p.dept}` : `\nDept: ${p.dept}`;
+  if (p.personality) ctx += zh ? `\n性格特点：${p.personality}` : `\nPersonality: ${p.personality}`;
+  if (p.notes) ctx += zh ? `\n备注：${p.notes}` : `\nNotes: ${p.notes}`;
+  if (p.history && p.history.length > 0) {
+    ctx += zh ? `\n\n--- 历史案例记录 (共${p.history.length}条，显示最近5条) ---` : `\n\n--- Case History (${p.history.length} total, showing latest 5) ---`;
+    p.history.slice(0, 5).forEach((h, i) => {
+      const d = new Date(h.date).toLocaleDateString(zh?'zh-CN':'en-US');
+      ctx += `\n[${d}] `;
+      ctx += zh ? `情况：${h.situ||'N/A'}` : `Situation: ${h.situ||'N/A'}`;
+      if (h.summary) ctx += zh ? ` → 要点：${h.summary}` : ` → Key points: ${h.summary}`;
+    });
+  }
+  ctx += zh
+    ? `\n\n请结合以上员工档案和历史记录来分析当前问题，在回答中体现对该员工的了解和之前案例的关联性。`
+    : `\n\nPlease incorporate the above employee profile and history when analyzing the current case. Show awareness of patterns and connections to past cases.`;
+  return ctx;
+}
+
+function scrollToDetail(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.classList.add('highlighted');
+  setTimeout(() => el.classList.remove('highlighted'), 1800);
+}
+
+function selectProvider(p) {
+  S.provider = p;
+  S.selectedModel = PROVIDERS[p].models[0].id;
+  S.apiKey = '';
+  sessionStorage.setItem('ccp_prov', p);
+  sessionStorage.setItem('ccp_model', S.selectedModel);
+  sessionStorage.removeItem('ccp_key');
+  render();
+}
+
+function handleKey(v) {
+  S.apiKey = v.trim();
+  sessionStorage.setItem('ccp_key', S.apiKey);
+  // Live enable/disable mode cards
+  const hasKey = S.apiKey.length > 8;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.toggle('disabled', !hasKey));
+  const hint = document.querySelector('.main > [style*="margin-top:-10px"]');
+  if (hint) hint.style.display = hasKey ? 'none' : '';
+}
+
+function handleModel(v) {
+  S.selectedModel = v === '__custom__' ? '' : v;
+  sessionStorage.setItem('ccp_model', S.selectedModel);
+  if (v === '__custom__') render();
+}
+
+function handleCustomModel(v) {
+  S.selectedModel = v.trim();
+  sessionStorage.setItem('ccp_model', S.selectedModel);
+}
+
+function startMode(mode) {
+  if (!S.apiKey || S.apiKey.length < 8) { alert(t('errKey')); return; }
+  if (!S.selectedModel) { alert(S.lang==='zh'?'请选择或输入模型 ID':'Please select or enter a model ID'); return; }
+  if (mode==='roleplay') set({ view:'setup', mode:'roleplay' });
+  else set({ view:'case', mode:'case', caseOutput:null, error:'' });
+}
+
+function startChat() {
+  let sc = S.scenario;
+  if (sc==='custom') {
+    const el = document.getElementById('customScIn');
+    const v = el ? el.value.trim() : S.customScenarioText;
+    if (!v) { alert(t('errSc')); return; }
+    S.customScenarioText = v;
+    sc = v;
+  } else if (typeof sc === 'number') {
+    sc = t('scenarios')[sc];
+  } else { alert(t('errSc')); return; }
+
+  // Hardcoded employee opening — no API call needed to start
+  const openings = {
+    zh: [
+      '嗯…你好，你找我是有什么事吗？',
+      '你好，我听说你想跟我谈谈？',
+      '嗯…好的，你说吧，什么事？',
+    ],
+    en: [
+      'Hi, you wanted to speak with me?',
+      'Hey, I heard you wanted to have a chat?',
+      'Hi… so what did you want to talk about?',
+    ],
+  };
+  const pool = openings[S.lang] || openings.zh;
+  const opening = pool[Math.floor(Math.random() * pool.length)];
+
+  set({
+    view: 'chat',
+    messages: [{ role: 'assistant', content: opening }],
+    userMessages: [],
+    turnCount: 0,
+    isLoading: false,
+    error: '',
+    activeScenario: sc,
+  });
+}
+
+async function sendMsg() {
+  const el = document.getElementById('chatIn');
+  if (!el) return;
+  const text = el.value.trim();
+  if (!text || S.isLoading) return;
+  el.value = ''; el.style.height='auto';
+
+  S.messages = [...S.messages, { role:'user', content:text }];
+  S.userMessages = [...S.userMessages, text];
+  S.turnCount += 1;
+  S.isLoading = true; S.error = '';
+  render();
+
+  try {
+    const sys = empPrompt(S.activeScenario, S.difficulty, S.coachModel, S.lang);
+    const reply = await callAPI(S.messages, sys);
+    S.messages = [...S.messages, { role:'assistant', content:reply }];
+    S.isLoading = false;
+    render();
+  } catch(e) {
+    S.isLoading = false;
+    set({ error: t('errApi') + ' ' + (e.message||'') });
+  }
+}
+
+async function endSession() {
+  if (S.userMessages.length < 1) { resetHome(); return; }
+  S.feedbackLoading = true;
+  S.error = '';
+  set({ view:'feedback' });
+
+  try {
+    const sys = fbPrompt(S.coachModel, S.activeScenario, S.lang);
+    const convo = S.messages.map(m=>`${m.role==='user'?(S.lang==='zh'?'经理':'Manager'):(S.lang==='zh'?'员工':'Employee')}: ${m.content}`).join('\n\n');
+    const uMsgs = S.userMessages.map((m,i)=>`${i+1}. ${m}`).join('\n');
+    const prompt = S.lang==='zh'
+      ? `请评估以下教练对话：\n\n${convo}\n\n经理的所有发言（共${S.userMessages.length}条）：\n${uMsgs}`
+      : `Please evaluate the following coaching conversation:\n\n${convo}\n\nManager's statements (${S.userMessages.length} total):\n${uMsgs}`;
+
+    const raw = await callAPI([{ role:'user', content:prompt }], sys);
+    let fb;
+    try {
+      const m = raw.match(/\{[\s\S]*\}/);
+      fb = JSON.parse(m ? m[0] : raw);
+    } catch {
+      fb = {
+        lineReview: S.userMessages.map(m=>({ message:m, rating:'warning', comment: S.lang==='zh'?'解析失败，请重试':'Parse failed, please retry', suggestion:'' })),
+        scores:{ listening:12, questioning:12, modelAdherence:12, avoidingAdvice:12, safeSpace:12 },
+        highlights:[S.lang==='zh'?'完成了完整对话练习':'Completed a full practice session'],
+        improvements:[S.lang==='zh'?'请重试以获取详细反馈':'Please retry for detailed feedback'],
+        nextSteps: S.lang==='zh'?'继续保持练习！':'Keep practicing!',
+      };
+    }
+    S.feedbackLoading = false;
+    set({ feedback:fb, feedbackLang: S.lang });
+  } catch(e) {
+    S.feedbackLoading = false;
+    const errMsg = S.lang==='zh'
+      ? `获取反馈失败：${e.message||'未知错误'}。您可以返回首页重新开始。`
+      : `Failed to get feedback: ${e.message||'Unknown error'}. You can return home to start over.`;
+    set({ error: errMsg, view:'feedback', feedback: null });
+  }
+}
+
+/* Re-generate feedback in current language */
+async function regenerateFeedback() {
+  if (S.userMessages.length < 1) return;
+  S.feedbackLoading = true;
+  S.feedback = null;
+  S.error = '';
+  render();
+  try {
+    const sys = fbPrompt(S.coachModel, S.activeScenario, S.lang);
+    const convo = S.messages.map(m=>`${m.role==='user'?(S.lang==='zh'?'经理':'Manager'):(S.lang==='zh'?'员工':'Employee')}: ${m.content}`).join('\n\n');
+    const uMsgs = S.userMessages.map((m,i)=>`${i+1}. ${m}`).join('\n');
+    const prompt = S.lang==='zh'
+      ? `请评估以下教练对话：\n\n${convo}\n\n经理的所有发言（共${S.userMessages.length}条）：\n${uMsgs}`
+      : `Please evaluate the following coaching conversation:\n\n${convo}\n\nManager's statements (${S.userMessages.length} total):\n${uMsgs}`;
+    const raw = await callAPI([{ role:'user', content:prompt }], sys);
+    let fb;
+    try {
+      const m = raw.match(/\{[\s\S]*\}/);
+      fb = JSON.parse(m ? m[0] : raw);
+    } catch {
+      fb = {
+        lineReview: S.userMessages.map(m=>({ message:m, rating:'warning', comment: S.lang==='zh'?'解析失败':'Parse failed', suggestion:'' })),
+        scores:{ listening:12, questioning:12, modelAdherence:12, avoidingAdvice:12, safeSpace:12 },
+        highlights:[S.lang==='zh'?'完成了完整对话练习':'Completed a full practice session'],
+        improvements:[S.lang==='zh'?'请重试以获取详细反馈':'Please retry for detailed feedback'],
+        nextSteps: S.lang==='zh'?'继续保持练习！':'Keep practicing!',
+      };
+    }
+    S.feedbackLoading = false;
+    set({ feedback:fb, feedbackLang: S.lang });
+  } catch(e) {
+    S.feedbackLoading = false;
+    set({ error: t('errApi') + ' ' + (e.message||'') });
+  }
+}
+
+async function submitCase() {
+  const situ  = document.getElementById('cSitu')?.value.trim();
+  const tried = document.getElementById('cTried')?.value.trim();
+  const goal  = document.getElementById('cGoal')?.value.trim();
+  if (!situ||!goal) { set({ error: S.lang==='zh'?'请填写情况描述和期望结果':'Please fill in the situation and desired outcome.' }); return; }
+  S.caseSitu=situ; S.caseTried=tried; S.caseGoal=goal;
+  S.caseLoading=true; S.error=''; S.caseOutput=null;
+  render();
+
+  try {
+    const profileCtx = buildProfileContext();
+    const sys = casePrompt(S.lang) + profileCtx;
+    const prompt = S.lang==='zh'
+      ? `情况：${situ}\n\n已尝试方法：${tried||'未提及'}\n\n期望结果：${goal}`
+      : `Situation: ${situ}\n\nAlready tried: ${tried||'Not mentioned'}\n\nDesired outcome: ${goal}`;
+    const out = await callAPI([{ role:'user', content:prompt }], sys);
+    S.caseLoading=false;
+    // Save to profile history if a profile is selected
+    if (S.profileId) {
+      const summaryMatch = out.match(/##\s*(?:问题诊断|Problem Diagnosis)\s*\n([\s\S]*?)(?=\n##|$)/);
+      const summary = summaryMatch ? summaryMatch[1].replace(/^[\s\-\*•]+/gm,'').trim().substring(0, 200) : '';
+      addHistoryToProfile(S.profileId, { situ, tried, goal, summary });
+    }
+    set({ caseOutput:out, caseOutputLang: S.lang });
+  } catch(e) {
+    S.caseLoading=false;
+    set({ error: t('errApi') + ' ' + (e.message||'') });
+  }
+}
+
+/* Re-submit case in new language */
+async function resubmitCase() {
+  if (!S.caseSitu) return;
+  S.caseLoading=true; S.error=''; S.caseOutput=null;
+  render();
+  try {
+    const profileCtx = buildProfileContext();
+    const sys = casePrompt(S.lang) + profileCtx;
+    const prompt = S.lang==='zh'
+      ? `情况：${S.caseSitu}\n\n已尝试方法：${S.caseTried||'未提及'}\n\n期望结果：${S.caseGoal}`
+      : `Situation: ${S.caseSitu}\n\nAlready tried: ${S.caseTried||'Not mentioned'}\n\nDesired outcome: ${S.caseGoal}`;
+    const out = await callAPI([{ role:'user', content:prompt }], sys);
+    S.caseLoading=false;
+    set({ caseOutput:out, caseOutputLang: S.lang });
+  } catch(e) {
+    S.caseLoading=false;
+    set({ error: t('errApi') + ' ' + (e.message||'') });
+  }
+}
+
+function resetHome() {
+  set({ view:'home', messages:[], userMessages:[], turnCount:0, feedback:null, feedbackLoading:false, error:'', caseOutput:null });
+}
+
+/* ==============================================================
+   UTILS
+   ============================================================== */
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function scrollChat() {
+  requestAnimationFrame(() => {
+    const el = document.getElementById('chatMsgs');
+    if (el) el.scrollTop = el.scrollHeight;
+  });
+}
+
+/* ==============================================================
+   TIP MODAL
+   ============================================================== */
+function showTip(index) {
+  // Remove any existing modal
+  const existing = document.querySelector('.modal-backdrop');
+  if (existing) existing.remove();
+
+  const tips = TIP_DATA[S.lang] || TIP_DATA.zh;
+  const tip  = tips[index];
+  if (!tip) return;
+
+  const practiceLabel = S.lang === 'zh' ? '📋 实战练习方法' : '📋 Practice Techniques';
+  const bookLabel     = S.lang === 'zh' ? '📖 书中原文' : '📖 From the Book';
+
+  const el = document.createElement('div');
+  el.className = 'modal-backdrop';
+  el.innerHTML = `
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <span class="modal-head-icon">${tip.icon}</span>
+        <div style="flex:1;min-width:0">
+          <div class="modal-head-title" id="modal-title">${esc(tip.title)}</div>
+          <div class="modal-head-sub">${esc(tip.sub)}</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">${esc(tip.desc)}</p>
+
+        <div class="modal-quote">
+          <div class="modal-quote-label">${bookLabel}</div>
+          <div class="modal-quote-text">"${esc(tip.quote)}"</div>
+          <div class="modal-quote-page">— ${esc(tip.page)}</div>
+        </div>
+
+        <div class="modal-tips-title">${practiceLabel}</div>
+        ${tip.tips.map(t => `
+        <div class="modal-tip-item">
+          <span class="modal-tip-dot">◆</span>
+          <span>${esc(t)}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+
+  // Close on backdrop click (outside modal-box)
+  el.addEventListener('click', e => {
+    if (e.target === el) closeModal();
+  });
+
+  // Close on Escape key
+  el._keyHandler = e => { if (e.key === 'Escape') closeModal(); };
+  document.addEventListener('keydown', el._keyHandler);
+
+  document.body.appendChild(el);
+}
+
+function closeModal() {
+  const el = document.querySelector('.modal-backdrop');
+  if (!el) return;
+  if (el._keyHandler) document.removeEventListener('keydown', el._keyHandler);
+  el.remove();
+}
+
+/* ==============================================================
+   INIT
+   ============================================================== */
+render();
+</script>
+</body>
+</html>
