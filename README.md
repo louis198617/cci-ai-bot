@@ -40,7 +40,8 @@ This platform is designed for managers and leadership learners to practice **coa
 
 - 🌐 中文 / English 双语切换（右上角）
 - 📋 实时教练模型步骤参考卡（聊天界面右侧）
-- 🔒 API Key 本地安全存储（仅 sessionStorage，不上传服务器）
+- 🔒 API Key 本地安全存储（sessionStorage，关闭标签页自动清除，不上传服务器）
+- 👤 被教练者档案持久保存（localStorage，跨会话保留）
 
 ---
 
@@ -66,17 +67,18 @@ This is a **single HTML file** application — no installation or server require
 ### 步骤 | Steps:
 
 1. **下载文件** | Download the file:
-   ```
+```
    coaching-platform.html
-   ```
+```
 
 2. **用浏览器打开** | Open in browser:
    - 双击文件，或将文件拖入 Chrome / Safari / Edge / Firefox
    - Simply double-click, or drag into your browser
 
-3. **输入 API Key** | Enter your API Key:
-   - 在页面顶部输入您的 Anthropic API Key
-   - Enter your Anthropic API Key in the input field on the home page
+3. **选择 AI 提供商并输入 API Key** | Choose AI provider and enter API Key:
+   - 在首页选择您偏好的 AI 提供商（Anthropic / OpenAI / Google / OpenRouter）
+   - 输入对应的 API Key，即可开始使用
+   - Choose your preferred AI provider (Anthropic / OpenAI / Google / OpenRouter) and enter its API Key
 
 4. **开始使用** | Start using:
    - 选择模式，开始练习！
@@ -86,13 +88,23 @@ This is a **single HTML file** application — no installation or server require
 
 ## API Key 说明 | About the API Key
 
-**您需要自备 Anthropic API Key 才能使用本平台。**
-**You need your own Anthropic API Key to use this platform.**
+**本平台支持 4 个 AI 提供商，您只需选择其中一个并自备对应的 API Key。**
+**This platform supports 4 AI providers — choose one and bring your own API Key.**
 
-- 申请地址 / Get one at: [https://console.anthropic.com](https://console.anthropic.com)
-- 选择模型 / Model used: `claude-sonnet-4-20250514`
-- **安全说明** / **Security**: Your API Key is stored only in your browser's `sessionStorage`. It is **never transmitted to any third-party server**. All API calls go directly from your browser to Anthropic's servers.
-- API Key 在关闭标签页后自动清除 / Key is cleared when you close the browser tab
+| 提供商 / Provider | 申请地址 / Get API Key | 推荐模型 / Recommended Model |
+|---|---|---|
+| **Anthropic** | [console.anthropic.com](https://console.anthropic.com) | `claude-sonnet-4-20250514` |
+| **OpenAI** | [platform.openai.com](https://platform.openai.com) | `gpt-4o` |
+| **Google** | [aistudio.google.com](https://aistudio.google.com) | `gemini-2.0-flash` |
+| **OpenRouter** | [openrouter.ai/keys](https://openrouter.ai/keys) | 可访问所有主流模型 / Access all major models |
+
+**🔒 安全说明 | Security:**
+- API Key 仅存储在您浏览器的 `sessionStorage` 中，**不会上传至任何第三方服务器**
+- 所有 API 请求直接从您的浏览器发送至对应 AI 提供商的服务器
+- 关闭标签页后 API Key 自动清除
+- Your API Key is stored only in your browser's `sessionStorage` and is **never transmitted to any third-party server**
+- All API calls go directly from your browser to the respective AI provider's servers
+- Key is automatically cleared when you close the browser tab
 
 ---
 
@@ -100,9 +112,10 @@ This is a **single HTML file** application — no installation or server require
 
 - **架构**: 纯 HTML/CSS/JavaScript 单页应用，无框架依赖
 - **Architecture**: Pure HTML/CSS/JS SPA, no framework dependencies
-- **API**: Anthropic Claude API (direct browser access with `anthropic-dangerous-direct-browser-access: true` header)
-- **存储**: 仅 `sessionStorage`，关闭标签页自动清除
-- **Storage**: `sessionStorage` only — clears on tab close
+- **API**: 支持 Anthropic / OpenAI / Google / OpenRouter 四大提供商，直接从浏览器调用（Anthropic 使用 `anthropic-dangerous-direct-browser-access: true` header）
+- **API**: Supports Anthropic / OpenAI / Google / OpenRouter — direct browser-to-provider API calls
+- **存储**: API Key 使用 `sessionStorage`（关闭标签页自动清除）；被教练者档案使用 `localStorage`（跨会话保留）
+- **Storage**: API Key via `sessionStorage` (clears on tab close); coachee profiles via `localStorage` (persists across sessions)
 - **兼容性**: 现代浏览器（Chrome, Safari, Edge, Firefox）
 - **Compatibility**: Modern browsers (Chrome, Safari, Edge, Firefox)
 
